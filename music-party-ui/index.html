@@ -1,11 +1,50 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="theme-latte">
 
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Vue + TS</title>
+    <style>
+        html,
+        body,
+        #app {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            box-sizing: border-box;
+            background-color: #eff1f5;
+        }
+
+        * {
+            font-family: 'MyCustomFont';
+            color: #4c4f69;
+        }
+
+        @font-face {
+            font-family: 'MyCustomFont';
+            src:
+                /* 1. 先检查本地是否有 JetBrains Mono */
+                local('JetBrains Mono'),
+                local('JetBrainsMono-Regular'),
+
+                /* 2. 如果没有，检查本地是否有思源黑体 */
+                local('Source Han Sans SC'),
+                local('SourceHanSansSC-Regular'),
+
+                /* 3. 如果本地都没有，则加载服务器上的 TTF 字体 */
+                url('/assets/fonts/JetBrainsMono-Regular.ttf') format('truetype'),
+
+                /* 4. 如果 JetBrains Mono 加载失败，再尝试思源黑体 */
+                url('/assets/fonts/SourceHanSansSC-Regular.otf') format('opentype');
+
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+            /* 优化加载时的显示行为 */
+        }
+    </style>
 </head>
 
 <body>
