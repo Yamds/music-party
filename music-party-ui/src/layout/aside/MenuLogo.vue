@@ -1,5 +1,5 @@
 <template>
-    <div class="logo" :class="isCollapse ? '' : 'logo-hide'">
+    <div class="logo" :class="store.isCollapse ? 'logo-hide' : ''">
         <img :src="iconImg" alt="">
         <h3>{{ title_text }}</h3>
     </div>
@@ -8,11 +8,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import iconImg from "@/assets/Kumiko_chann.png"
-import { menuStore } from '@/store/menu';
-const store = menuStore();
-const isCollapse = computed(() => {
-    return !store.getCollapse;
-})
+import { useMenuStore } from '@/store/menuStore';
+const store = useMenuStore();
 
 let title_text = ref("音乐派对！")
 
@@ -36,21 +33,21 @@ let title_text = ref("音乐派对！")
 }
 
 .logo img {
-    width: 38px;
-    height: 38px;
+    width: 28px;
+    height: 28px;
 }
 
-.logo span {
+.logo h3 {
     display: inline-block;
     font-weight: bold;
     overflow: hidden;
     transition: all 0.5s;
-    width: 130px;
+    /* width: 130px; */
     opacity: 1;
     white-space: nowrap !important;
 }
 
-.logo-hide span {
+.logo-hide h3 {
     width: 0px;
     opacity: 0;
 }

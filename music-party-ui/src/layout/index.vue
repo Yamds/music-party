@@ -4,7 +4,9 @@
             <Aside></Aside>
         </el-aside>
         <el-container>
-            <el-header>Header</el-header>
+            <el-header>
+                <Header></Header>
+            </el-header>
             <el-main>
                 <router-view></router-view>
             </el-main>
@@ -16,11 +18,17 @@
 
 <script setup lang="ts">
 import Aside from './aside/Aside.vue';
+import Header from './header/Header.vue';
 
 </script>
 
 <style scoped>
 .common-layout {
     height: 100%;
+}
+
+.el-main {
+    margin: 0;
+    padding: 0;
 }
 </style>

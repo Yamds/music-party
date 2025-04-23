@@ -3,8 +3,8 @@
         <!-- logo组件 -->
         <MenuLogo></MenuLogo>
         <!-- 只有一个子菜单打开 -->
-        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" unique-opened router="true"
-            :collapse="isCollapse">
+        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" unique-opened :router="true"
+            :collapse="store.isCollapse">
             <menu-item :menuList="menuList"></menu-item>
         </el-menu>
     </div>
@@ -15,18 +15,14 @@ import { ref, reactive, computed } from 'vue';
 import MenuItem from './MenuItem.vue';
 import MenuLogo from './MenuLogo.vue';
 import { useRoute } from 'vue-router';
-import { menuStore } from '@/store/menu';
+import { useMenuStore } from '@/store/menuStore';
 
-const store = menuStore();
+const store = useMenuStore();
 const route = useRoute();
 // 获取激活的菜单
 const activeIndex = computed(() => {
     const { path } = route;
     return path;
-})
-
-const isCollapse = computed(() => {
-    return store.getCollapse;
 })
 
 let menuList = reactive([
