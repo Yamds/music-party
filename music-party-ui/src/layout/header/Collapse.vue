@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main">
         <el-icon @click="store.setCollapse" style="cursor: pointer;">
             <component :is="store.isCollapse ? ArrowRightBold : ArrowLeftBold"></component>
         </el-icon>
@@ -14,4 +14,8 @@ const store = useMenuStore();
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.main {
+    margin-top:6px;
+}
+</style>

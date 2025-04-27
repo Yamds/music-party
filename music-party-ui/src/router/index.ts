@@ -66,8 +66,16 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/bind/Bilibili.vue'),
                 name: 'bilibili',
                 meta: {
-                    title: '比利♂绑定',
+                    title: 'bilibili',
                     icon: 'ri:bilibili-fill'
+                }
+            }, {
+                path: '/bind/song-list',
+                component: () => import('@/views/bind/SongList.vue'),
+                name: 'song-list',
+                meta: {
+                    title: '歌单收藏',
+                    icon: 'streamline:music-folder-song'
                 }
             }
 

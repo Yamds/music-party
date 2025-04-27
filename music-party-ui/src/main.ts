@@ -17,8 +17,8 @@ const app = createApp(App);
 app.use(router)
 app.use(ElementPlus)
 app.use(pinia)
-pinia.use(piniaPluginPersistedstate)
 app.component('IconifyIcon', IconifyIcon) // 全局注册
+pinia.use(piniaPluginPersistedstate)
 
 app.mount('#app')
 

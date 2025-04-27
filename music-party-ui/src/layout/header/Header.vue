@@ -1,18 +1,24 @@
 <template>
     <div class="header">
-        <Collapse class="collapse"></Collapse>
+        <div class="left">
+            <Collapse class="collapse"></Collapse>
+        </div>
+        <div class="right">
+            <RightBar></RightBar>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import Collapse from './Collapse.vue';
+import RightBar from './RightBar.vue';
 
 </script>
 
 <style scoped>
 .header {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     height: 100%;
 }

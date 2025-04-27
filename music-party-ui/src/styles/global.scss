@@ -10,12 +10,21 @@ body,
 
 * {
     font-family: 'MyCustomFont';
-    color: var(--el-color-text-primary);
+    color: var(--el-text-color-primary);
 }
-
-button * {
+.el-button.el-button--primary *{
+    color: var(--el-color-primary);
+    transition: all 0.5s;
+}
+.el-button.el-button--primary *:hover{
     color: var(--el-bg-color);
 }
+.el-button.el-button--primary:not(.is-plain):not(.is-round):not(.is-circle) *{
+    color: var(--el-bg-color);
+}
+// button * {
+//     color: var(--el-bg-color);
+// }
 
 .el-menu,
 .el-tabs,

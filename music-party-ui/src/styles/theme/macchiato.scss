@@ -58,8 +58,8 @@ html.theme-macchiato {
     --catppuccin-mantle: #{$mantle};
     --catppuccin-crust: #{$crust};
 
-    --el-color-white: #ffffff;
-    --el-color-black: #000000;
+    --el-color-white: #{$base};
+    --el-color-black: #{$text};
 
     --el-color-primary: #{$mauve};
     --el-color-primary-light-1: color-mix(in srgb, var(--el-color-white) 10%, var(--el-color-primary));
@@ -119,11 +119,11 @@ html.theme-macchiato {
     --el-bg-color-page: #{$mantle};
     --el-bg-color-overlay: #{$crust};
 
-    --el-color-text-primary: #{$text};
-    --el-color-text-regular: #{$subtext1};
-    --el-color-text-secondary: #{$subtext0};
-    --el-color-text-placeholder: #{$overlay0};
-    --el-color-text-disabled: #{$overlay1};
+    --el-text-color-primary: #{$text};
+    --el-text-color-regular: #{$subtext1};
+    --el-text-color-secondary: #{$subtext0};
+    --el-text-color-placeholder: #{$overlay0};
+    --el-text-color-disabled: #{$overlay1};
 
     --el-border-color: #{$surface2};
     --el-border-color-light: #{$surface1};

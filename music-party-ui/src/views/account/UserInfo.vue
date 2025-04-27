@@ -1,8 +1,8 @@
 <template>
     <div class="main">
-        <DocBlock :type="'info'" title="个人信息" icon="fa-solid:user" context="这是用户个人资料信息" />
+        <DocBlock :type="'info'" title="个人信息" icon="fa-solid:user" context="用户个人资料信息" />
         <el-divider content-position="left">个人信息</el-divider>
-        <el-descriptions title="" column="1">
+        <el-descriptions title="" :column=1>
             <el-descriptions-item label="用户名">
                 {{ userInfo.name }}
                 <span v-if="!userInfo.name">未获取</span>
@@ -12,16 +12,19 @@
                 <span v-if="!userInfo.password">未获取</span>
             </el-descriptions-item>
             <el-descriptions-item label="网易云音乐">
-                {{ userInfo.bind.netease }}
+                <span v-if="userInfo.bind.netease">{{ userInfo.bind.netease }}</span>
                 <span v-if="!userInfo.bind.netease">未获取</span>
             </el-descriptions-item>
             <el-descriptions-item label="bilibili">
-                {{ userInfo.bind.bilibili }}
+                <span v-if="userInfo.bind.bilibili">{{ userInfo.bind.bilibili }}</span>
                 <span v-if="!userInfo.bind.bilibili">未获取</span>
             </el-descriptions-item>
-            <el-descriptions-item label="role">
-                <el-tag size="small" v-if="userInfo.role.length == 0">无角色</el-tag>
+            <el-descriptions-item label="身份">
+                <el-tag size="small" v-if="userInfo.role != null && userInfo.role.length == 0">无身份</el-tag>
                 <el-tag size="small" v-for="item in userInfo.role">{{ item }}</el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="">
+                <el-button type="primary" plain @click="store.getUser(1)">更新</el-button>
             </el-descriptions-item>
         </el-descriptions>
         <el-divider content-position="left">编辑信息</el-divider>
@@ -42,22 +45,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { type UserInfoInter } from '@/types/account';
+import { computed, onMounted } from 'vue'
 import DocBlock from '@/components/DocBlock.vue';
+import { useUserStore } from '@/store/userStore';
 
-const userInfo: UserInfoInter = reactive({
-    name: "",
-    password: "",
-    bind: {
-        netease: "",
-        bilibili: ""
-    },
-    role: []
+const store = useUserStore();
+const userInfo = computed(() => store.userInfo);
+
+onMounted(() => {
+    store.getUser(1)
 })
-
-
-
 
 </script>
 

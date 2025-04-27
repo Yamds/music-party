@@ -3,7 +3,7 @@
         <!-- logo组件 -->
         <MenuLogo></MenuLogo>
         <!-- 只有一个子菜单打开 -->
-        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" unique-opened :router="true"
+        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo" :router="true"
             :collapse="store.isCollapse">
             <menu-item :menuList="menuList"></menu-item>
         </el-menu>
@@ -83,7 +83,7 @@ let menuList = reactive([
         component: "Layout",
         name: "bind",
         meta: {
-            title: "绑定账号",
+            title: "账号歌单",
             icon: "eos-icons:role-binding",
         },
         children: [
@@ -102,6 +102,14 @@ let menuList = reactive([
                 meta: {
                     title: "bilibili",
                     icon: "ri:bilibili-fill",
+                }
+            }, {
+                path: "/bind/song-list",
+                component: "/system/bind/SongList",
+                name: "song-list",
+                meta: {
+                    title: "收藏歌单",
+                    icon: "streamline:music-folder-song",
                 }
             }, {
                 name: "unbind",
