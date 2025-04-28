@@ -7,10 +7,6 @@
                 {{ userInfo.name }}
                 <span v-if="!userInfo.name">未获取</span>
             </el-descriptions-item>
-            <el-descriptions-item label="密码">
-                {{ userInfo.password }}
-                <span v-if="!userInfo.password">未获取</span>
-            </el-descriptions-item>
             <el-descriptions-item label="网易云音乐">
                 <span v-if="userInfo.bind.netease">{{ userInfo.bind.netease }}</span>
                 <span v-if="!userInfo.bind.netease">未获取</span>
