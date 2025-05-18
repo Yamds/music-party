@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import iconImg from "@/assets/Kumiko_chann.png"
 import { useMenuStore } from '@/store/menuStore';
 const store = useMenuStore();

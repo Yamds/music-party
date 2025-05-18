@@ -20,7 +20,7 @@
                 <el-tag size="small" v-for="item in userInfo.role">{{ item }}</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="">
-                <el-button type="primary" plain @click="store.getUser(1)">更新</el-button>
+                <el-button type="primary" plain @click="store.getUser()">更新</el-button>
             </el-descriptions-item>
         </el-descriptions>
         <el-divider content-position="left">编辑信息</el-divider>
@@ -41,16 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import DocBlock from '@/components/DocBlock.vue';
 import { useUserStore } from '@/store/userStore';
 
 const store = useUserStore();
 const userInfo = computed(() => store.userInfo);
-
-onMounted(() => {
-    store.getUser(1)
-})
 
 </script>
 

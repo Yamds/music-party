@@ -1,5 +1,9 @@
 package fun.yamds.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaIgnore;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.util.SaResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import fun.yamds.pojo.Result;
 import fun.yamds.pojo.UserPojo;
@@ -17,31 +21,50 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
 public class TestController {
 
     @Autowired
     UserService userService;
 
+    @SaIgnore
     @PostMapping("/login")
     public Result login(@RequestBody UserPojo user) {
         return userService.login(user);
     }
 
+    @SaCheckLogin
+    @PostMapping("/logout")
+    public Result logout() {
+        StpUtil.logout();
+        return Result.ok().success(true).msg("注销账号");
+    }
+
+    // @SaIgnore
     @PostMapping("/register")
     public Result register(@RequestBody UserPojo user) {
         return userService.register(user);
     }
 
-    @GetMapping("/info/{userId}")
-    public Result getUserInfoById(@PathVariable Long userId) {  // 从路径中提取userID
+    // @SaCheckLogin
+    @GetMapping("/isLogin")
+    public Result isLogin() {
+        if(StpUtil.isLogin()) {
+            return Result.ok().msg("已登录").success(true);
+        }
+        return Result.error().msg("尚未登录").success(false);
+    }
+
+    @SaCheckLogin
+    @GetMapping("/info")
+    public Result getUserInfoById() {
         UserPojo user = new UserPojo();
-        user.setId(userId);
+        user.setId(StpUtil.getLoginIdAsLong());
         return userService.getUserInfoById(user);
     }
 
+    @SaIgnore
     @GetMapping("/checkUsername/{username}")
-    public Result getUserInfoById(@PathVariable String username) {  // 从路径中提取userID
+    public Result checkUsername(@PathVariable String username) {  // 从路径中提取userID
         QueryWrapper<UserPojo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         if(userService.getOne(queryWrapper) != null) {
@@ -49,6 +72,4 @@ public class TestController {
         }
         return Result.ok().msg("用户名可用");
     }
-
-
 }

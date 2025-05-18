@@ -1,87 +1,49 @@
 import axios from "axios";
 import { type ResultInter } from "@/types/result";
-import { newUserInfo, type returnUserInfoInter } from "@/types/account";
 
-export async function httpRegister(username: string, password: string): Promise<Boolean> {
-    try {
-        const res = await axios({
-            url: "http://localhost:10721/user/register",
-            method: "post",
-            data: {
-                username: username,
-                password: password
-            },
-        })
-        const result: ResultInter = res.data
-        if (result) {
-            if (result.success) {
-                return true
-            } else {
-                throw new Error(result.msg.toString());
-            }
-        }
-        throw new Error('响应结果为空');
-    } catch (error) {
-        console.error(error)
-        return false
-    }
-}
+const baseURL = import.meta.env.MODE === 'development'
+    ? 'http://localhost:80/api'
+    : 'http://45.95.212.18:34184/api'
 
-export async function httpLogin(username: string, password: string) {
-    try {
-        const res = await axios({
-            url: "http://localhost:10721/user/login",
-            method: "post",
-            data: {
-                username: username,
-                password: password
-            },
-        })
-        const result: ResultInter = res.data
-        if (result) {
-            if (result.success == true) {
-                return result.data
-            } else {
-                throw new Error(result.msg.toString());
-            }
-        }
-        throw new Error('响应结果为空');
-    } catch(error) {
-        throw error;
-    }
-}
+const axiosInstance = axios.create({
+    baseURL,
+    timeout: 5000,
+})
 
-export async function httpGetUserById(userId: Number): Promise<returnUserInfoInter> {
+// 封装一个请求函数
+async function request(method: 'get' | 'post' | 'put' | 'delete', url: string, data?: any): Promise<ResultInter> {
     try {
-        const res = await axios({
-            url: `http://localhost:10721/user/info/${userId}`,  // get请求
-            method: "get"
+        const res = await axiosInstance({
+            method,
+            url,
+            ...(method === 'get' ? { params: data } : { data })
         });
-        const result: ResultInter = res.data;
-        if (result) {
-            if (result.success) {
-                return result.data as returnUserInfoInter;
-            } else {
-                throw new Error(result.msg.toString());
-            }
-        }
-        throw new Error('响应结果为空');
-    } catch (error) {
+        if (res.data.success)
+            return res.data;
+
+        console.error("请求: " + url + "\t错误信息: " + res.data.code + " " + res.data.msg)
+        return res.data;
+    }
+    catch (error: any) {
         console.error(error)
-        return newUserInfo()
+        return { code: 500, success: false, msg: "服务器异常，请稍后再试..." }
     }
 }
 
-export async function httpUsernameExist(username: String): Promise<Boolean> {
-    try {
-        const res = await axios({
-            url: `http://localhost:10721/user/checkUsername/${username}`,  // get请求
-            method: "get"
-        });
-        const result: ResultInter = res.data;
-        return !result.success
-    } catch (error) {
-        console.error(error)
-        return false;
-    }
-}
+export const httpRegister = (username: string, password: string) =>
+    request('post', '/user/register', { username, password });
+
+export const httpLogin = (username: string, password: string) =>
+    request('post', '/user/login', { username, password });
+
+export const httpLogout = () =>
+    request('post', '/user/logout');
+
+export const httpGetUserByLogin = () =>
+    request('get', '/user/info');
+
+export const httpIsLogin = () =>
+    request('get', '/user/isLogin');
+
+export const httpUsernameExist = (username: string) =>
+    request('get', `/user/checkUsername/${username}`);

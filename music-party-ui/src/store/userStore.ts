@@ -1,44 +1,116 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 
-import { type UserInfoInter } from "@/types/account";
-import { httpGetUserById, httpLogin } from "@/api/user"
+import { type returnUserInfoInter, type UserInfoInter, newUserInfo } from "@/types/account";
+import { httpGetUserByLogin, httpIsLogin, httpLogin, httpLogout } from "@/api/user"
+import { ElMessage } from "element-plus";
 
 // 定义一个store
 export const useUserStore = defineStore('user', () => {
+    let login_loading = ref(false)
+    let isLogin = ref(false)
+
     const userInfo: UserInfoInter = reactive({
-        id: 0,
+        id: "",
         name: "",
         password: "",
         bind: {
             netease: 0,
-            bilibili: 0
+            bilibili: 0,
         },
-        role: []
+        role: [],
+        permission: [],
     })
 
-    const login = (username: string, password: string) => {
-        httpLogin(username, password).then(data => {
-            console.log(data);
+    const setIsLogin = () => {
+        httpIsLogin().then(data => {
+            if (data.success) {
+                isLogin.value = true
+                return true
+            }
+            isLogin.value = false
+            return false
         })
     }
 
-    const getUser = (userID: Number) => {
-        httpGetUserById(userID).then(data => {
-            // 更新本地userinfo
-            // console.log(data)
-            userInfo.id = data.user.id
-            userInfo.name = data.user.username
-            userInfo.password = data.user.password
-            userInfo.bind.bilibili = data.user.biliId
-            userInfo.bind.netease = data.user.neteaseId
-            userInfo.role = data.role_name
+    const login = (username: string, password: string) => {
+        login_loading.value = true
+        httpLogin(username, password).then(data => {
+            if (data.success) {
+                ElMessage({
+                    message: data.msg.toString(),
+                    type: 'success',
+                })
+            } else {
+                console.log(data)
+                ElMessage({
+                    message: data.msg.toString(),
+                    type: 'error',
+                })
+            }
+        }).finally(() => {
+            getUser()
+            login_loading.value = false
+        })
+    }
+
+    const logout = () => {
+        httpLogout().then(data => {
+            if (data.success) {
+                ElMessage({
+                    message: '账号已退出！',
+                    type: 'success',
+                })
+            } else {
+                if (data.code == 11011 || data.code == 11013)
+                    ElMessage({
+                        message: "已处于离线状态，请勿重复退出！",
+                        type: 'warning',
+                    })
+                else
+                    ElMessage({
+                        message: "异常登出请求！",
+                        type: 'error',
+                    })
+            }
+        }).finally(() => {
+            getUser()
+        })
+    }
+
+    const getUser = () => {
+        httpGetUserByLogin().then(data => {
+            // 成功: 置为get到的user，
+            // 失败: 置为空user
+            if (data.success) {
+                // 更新本地userinfo
+                const user_data = data.data as returnUserInfoInter
+                userInfo.id = user_data.user.id.toString()
+                userInfo.name = user_data.user.username
+                userInfo.bind.bilibili = user_data.user.biliId
+                userInfo.bind.netease = user_data.user.neteaseId
+                userInfo.role = user_data.role_name
+                userInfo.permission = user_data.permission_name
+            } else {
+                const temp = newUserInfo()
+                userInfo.id = temp.user.id
+                userInfo.name = temp.user.username
+                userInfo.bind.bilibili = temp.user.biliId
+                userInfo.bind.netease = temp.user.neteaseId
+                userInfo.role = temp.role_name
+                userInfo.permission = temp.permission_name
+            }
+        }).finally(() => {
+            setIsLogin()
         })
     }
 
     return {
+        isLogin,
+        login_loading,
         userInfo,
         login,
+        logout,
         getUser
     }
 })

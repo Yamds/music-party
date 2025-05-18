@@ -20,4 +20,7 @@ public interface UserService extends IService<UserPojo> {
     public Result getUserInfoById(UserPojo user);
 
     public Result register(UserPojo user);
+
+    public Result getPermissionById(UserPojo user);
+
 }

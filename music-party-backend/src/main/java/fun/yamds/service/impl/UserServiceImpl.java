@@ -1,6 +1,7 @@
 package fun.yamds.service.impl;
 
 import cn.dev33.satoken.secure.BCrypt;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author ：Yamds
@@ -50,6 +53,12 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
 
     @Override
     public Result login (UserPojo user) {
+        try {
+            Thread.sleep(2000); // 延时 5 秒（5000 毫秒）
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // 恢复中断状态
+            return Result.error().msg("线程被中断");
+        }
         Result result = getUser(user);
 
         if(result.getSuccess()) {
@@ -58,16 +67,16 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
             if(obj instanceof UserPojo user2) {
                 // 登录逻辑
                 if (user.getUsername().equals(user2.getUsername())&&BCrypt.checkpw(user.getPassword(), user2.getPassword())) {
-                    HashMap<String, Object> map = new HashMap<>();
-                    user2.setPassword(null);
-                    map.put("user", user2);
-                    return Result.ok().msg("登录成功").data(map);
+                    StpUtil.login(user2.getId());
+                    return Result.ok().msg("登录成功!");
                 } else
-                    return Result.error().msg("用户名或密码不正确");
+                    return Result.error().msg("用户名或密码不正确!");
             }else
-                return Result.error().msg("接收类型不正确");
-        } else
+                return Result.error().msg("接收类型不正确!");
+        } else {
+            result.setMsg("用户名或密码不正确!");
             return result;
+        }
     }
 
     @Override
@@ -81,10 +90,34 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
     }
 
     @Override
+    public Result getPermissionById(UserPojo user) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("permission_name", userMapper.getPermissionByUserId(user.getId()));
+        if(map.get("permission_name") != null)
+            return Result.ok().msg("权限获取成功").data(map);
+        else
+            return Result.error().msg("权限未获取或不存在");
+    }
+
+    @Override
     public Result getUserInfoById(UserPojo user) {
         Result result1 = getUser(user);
         Result result2 = getRoleById(user);
+        Result result3 = getPermissionById(user);
 
+        if(result1.getData() == null || result2.getData() == null || result3.getData() == null) {
+            return Result.error().msg("获取结果为空");
+        }
+
+        // 确保三项信息获取成功   如果获取失败，返回的result中包含失败信息
+        if(!result1.getSuccess())
+            return result1;
+        if(!result2.getSuccess())
+            return result2;
+        if(!result3.getSuccess())
+            return result3;
+
+        // 返回信息前 清除密码
         Object obj = result1.getData().get("user");
         if(obj instanceof UserPojo user2) {
             user2.setPassword(null);
@@ -92,16 +125,11 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
             return Result.error();
         }
 
-        if(result1.getSuccess()) {
-            if(result2.getSuccess()) {
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("user", user2);
-                map.put("role_name", result2.getData().get("role_name"));
-                return Result.ok().msg("成功获取用户信息和角色").data(map);
-            } else
-                return result2;
-        } else
-            return result1;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("user", user2);
+        map.put("role_name", result2.getData().get("role_name"));
+        map.put("permission_name", result3.getData().get("permission_name"));
+        return Result.ok().msg("成功获取用户信息、角色和权限").data(map);
     }
 
     // service

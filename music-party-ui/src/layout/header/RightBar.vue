@@ -12,16 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useUserStore } from '@/store/userStore';
 
 const store = useUserStore();
 
 const userInfo = computed(() => store.userInfo);
-
-onMounted(() => {
-    store.getUser(1)
-})
 
 const theme = ["latte", "frappe", "macchiato", "mocha"]
 const active_theme = ref("latte")

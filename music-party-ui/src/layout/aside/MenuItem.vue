@@ -32,10 +32,16 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/store/userStore';
+
+const store = useUserStore()
+
 defineProps(["menuList"])
 
-const handleMenuAction = (qwq: string) => {
-    //
+const handleMenuAction = (action: string) => {
+    if (action == "logout") {
+        store.logout()
+    }
 }
 
 </script>

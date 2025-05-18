@@ -36,23 +36,25 @@ const userForm = reactive({
     passwordCheck: '',
 })
 
-const checkUsername = (rule: any, value: any, callback: any) => {
+const checkUsername = (_rule: any, value: any, callback: any) => {
     if (!value)
         return callback(new Error('请输入用户名！'))
 
-    setTimeout(async () => {
-        if (await httpUsernameExist(value)) {
-            return callback(new Error('已存在该用户名！'))
-        }
-        if (value.length < 3 || value.length > 32) {
-            callback(new Error('用户名长度在3~32之间'))
-        } else {
-            callback()
-        }
+    setTimeout(() => {
+        httpUsernameExist(value).then(data => {
+            if (!data.success) {
+                return callback(new Error('已存在该用户名！'))
+            }
+            if (value.length < 3 || value.length > 32) {
+                callback(new Error('用户名长度在3~32之间'))
+            } else {
+                callback()
+            }
+        })
     }, 1000)
 }
 
-const checkPassword = (rule: any, value: any, callback: any) => {
+const checkPassword = (_rule: any, value: any, callback: any) => {
     if (value === '') {
         return callback(new Error('请输入密码！'));
     }
@@ -74,7 +76,7 @@ const checkPassword = (rule: any, value: any, callback: any) => {
     }
 };
 
-const checkPassword2 = (rule: any, value: any, callback: any) => {
+const checkPassword2 = (_rule: any, value: any, callback: any) => {
     if (value === '') {
         return callback(new Error('请输入密码！'));
     }
@@ -95,14 +97,23 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
         if (valid) {
-            httpRegister(userForm.username, userForm.password)
+            httpRegister(userForm.username, userForm.password).then(data => {
+                if (data.success) {
+                    ElMessage({
+                        message: '注册成功！',
+                        type: 'success',
+                    })
+                } else {
+                    ElMessage({
+                        message: `${data.msg}`,
+                        type: 'error',
+                    })
+                }
+            })
             userForm.password = ''
             userForm.passwordCheck = ''
             userForm.username = ''
-            ElMessage({
-                message: '注册成功！',
-                type: 'success',
-            })
+
         } else {
             ElMessage({
                 message: '请先填写字段。',
