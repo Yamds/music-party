@@ -39,13 +39,13 @@ public class TestController {
         return Result.ok().success(true).msg("注销账号");
     }
 
-    // @SaIgnore
+    @SaIgnore
     @PostMapping("/register")
     public Result register(@RequestBody UserPojo user) {
         return userService.register(user);
     }
 
-    // @SaCheckLogin
+    @SaCheckLogin
     @GetMapping("/isLogin")
     public Result isLogin() {
         if(StpUtil.isLogin()) {
