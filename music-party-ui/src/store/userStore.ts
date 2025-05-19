@@ -4,11 +4,13 @@ import { reactive, ref } from "vue";
 import { type returnUserInfoInter, type UserInfoInter, newUserInfo } from "@/types/account";
 import { httpGetUserByLogin, httpIsLogin, httpLogin, httpLogout } from "@/api/user"
 import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
 
 // 定义一个store
 export const useUserStore = defineStore('user', () => {
     let login_loading = ref(false)
     let isLogin = ref(false)
+    const router = useRouter()
 
     const userInfo: UserInfoInter = reactive({
         id: "",
@@ -41,15 +43,21 @@ export const useUserStore = defineStore('user', () => {
                     message: data.msg.toString(),
                     type: 'success',
                 })
+                getUser().then(() => {
+                    router.push({ name: "user-info" })
+                })
+
             } else {
                 console.log(data)
                 ElMessage({
                     message: data.msg.toString(),
                     type: 'error',
                 })
+                getUser()
             }
-        }).finally(() => {
+        }).catch(() => {
             getUser()
+        }).finally(() => {
             login_loading.value = false
         })
     }
@@ -60,6 +68,9 @@ export const useUserStore = defineStore('user', () => {
                 ElMessage({
                     message: '账号已退出！',
                     type: 'success',
+                })
+                getUser().then(() => {
+                    router.push({ name: "user-login" })
                 })
             } else {
                 if (data.code == 11011 || data.code == 11013)
@@ -78,8 +89,8 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    const getUser = () => {
-        httpGetUserByLogin().then(data => {
+    const getUser = async (): Promise<void> => {
+        return httpGetUserByLogin().then(data => {
             // 成功: 置为get到的user，
             // 失败: 置为空user
             if (data.success) {

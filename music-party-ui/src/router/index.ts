@@ -1,9 +1,13 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+
+import { usePermissionStore } from '@/store/permissionStore';
 import Layout from '@/layout/index.vue'
+import { useUserStore } from '@/store/userStore';
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
+        name: 'main',
         component: Layout,
         redirect: '/dashboard',
         children: [
@@ -13,12 +17,14 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'dashboard',
                 meta: {
                     title: '首页',
-                    icon: 'mingcute:music-3-fill'
+                    icon: 'mingcute:music-3-fill',
+                    permission: [],
                 }
             }
         ]
     }, {
         path: '/account',
+        name: 'account',
         component: Layout,
         redirect: '/account',
         children: [
@@ -28,35 +34,42 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'user-info',
                 meta: {
                     title: '账号信息',
-                    icon: 'mingcute:user-info-fill'
+                    icon: 'mingcute:user-info-fill',
+                    permission: ["user:info"],
                 }
             }, {
                 path: '/account/login',
                 component: () => import('@/views/account/UserLogin.vue'),
-                name: 'login',
+                name: 'user-login',
                 meta: {
                     title: '登录',
-                    icon: 'streamline:login-1-solid'
+                    icon: 'streamline:login-1-solid',
+                    permission: [],
+                    isLogin: false,
                 }
             }, {
                 path: '/account/register',
                 component: () => import('@/views/account/UserRegister.vue'),
-                name: 'register',
+                name: 'user-register',
                 meta: {
                     title: '注册',
-                    icon: 'mdi:register'
+                    icon: 'mdi:register',
+                    permission: [],
+                    isLogin: false,
                 }
             },
         ]
     }, {
         path: '/bind',
+        name: 'bind',
         component: Layout,
+        meta: { permission: ["user:bind"] },
         redirect: '/bind',
         children: [
             {
                 path: '/bind/netease-music',
                 component: () => import('@/views/bind/NeteaseMusic.vue'),
-                name: 'netease-music',
+                name: 'bind-netease-music',
                 meta: {
                     title: '绑定网易云音乐',
                     icon: 'tabler:brand-netease-music'
@@ -64,7 +77,7 @@ const routes: Array<RouteRecordRaw> = [
             }, {
                 path: '/bind/bilibili',
                 component: () => import('@/views/bind/Bilibili.vue'),
-                name: 'bilibili',
+                name: 'bind-bilibili',
                 meta: {
                     title: 'bilibili',
                     icon: 'ri:bilibili-fill'
@@ -72,7 +85,7 @@ const routes: Array<RouteRecordRaw> = [
             }, {
                 path: '/bind/song-list',
                 component: () => import('@/views/bind/SongList.vue'),
-                name: 'song-list',
+                name: 'bind-song-list',
                 meta: {
                     title: '歌单收藏',
                     icon: 'streamline:music-folder-song'
@@ -82,7 +95,9 @@ const routes: Array<RouteRecordRaw> = [
         ]
     }, {
         path: '/room',
+        name: 'room',
         component: Layout,
+        meta: { permission: ["user:room"] },
         redirect: '/room',
         children: [
             {
@@ -106,7 +121,9 @@ const routes: Array<RouteRecordRaw> = [
         ]
     }, {
         path: '/backstage',
+        name: 'backstage',
         component: Layout,
+        meta: { permission: ["admin:info"] },
         redirect: '/backstage',
         children: [
             {
@@ -125,9 +142,29 @@ const routes: Array<RouteRecordRaw> = [
 
 ]
 
+
+
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.beforeEach(async (to) => {
+    const userStore = useUserStore()
+    const permStore = usePermissionStore()
+
+    // 条件: 已登录&组件需要未登录
+    // 比如login，登录后就不需要login了，直接跳回首页
+    if (to.meta.isLogin === false && userStore.isLogin) {
+        return '/' // 跳转到首页
+    }
+
+    // 进入没权限的，跳转首页
+    if (!await permStore.isRouteVisible(to)) {
+
+        return '/'
+    }
+    return true
 })
 
 export default router

@@ -10,9 +10,6 @@
             <span>Music！</span>
             <span>Let's Enjoy!</span>
         </div>
-
-
-
     </div>
 </template>
 
@@ -83,14 +80,12 @@ span {
 
 .background-icon {
     float: left;
-
-    transform: translate(0%, 5%);
     font-size: 150rem;
-    /* animation: rotate 30s linear infinite; */
 }
 
 .background-icon>* {
     animation: rotate 30s linear infinite;
+
 }
 
 .background-icon * {
