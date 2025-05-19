@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 @TableName("user_role")
 public class UserRolePojo {
 
-    @TableId
     @TableField("user_id")
     private Long userId;  // 用户id
 

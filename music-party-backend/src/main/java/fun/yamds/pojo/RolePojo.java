@@ -20,8 +20,7 @@ import lombok.NoArgsConstructor;
 @TableName("role")
 public class RolePojo {
 
-    @TableId
-    @TableField("role_id")
+    @TableId("role_id")
     private Long roleID;
 
     @TableField("role_name")

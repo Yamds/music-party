@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', () => {
         permission: [],
     })
 
-    const setIsLogin = () => {
+    const setIsLogin = async () => {
         httpIsLogin().then(data => {
             if (data.success) {
                 isLogin.value = true
@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    const login = (username: string, password: string) => {
+    const login = async (username: string, password: string) => {
         login_loading.value = true
         httpLogin(username, password).then(data => {
             if (data.success) {
@@ -62,7 +62,7 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    const logout = () => {
+    const logout = async () => {
         httpLogout().then(data => {
             if (data.success) {
                 ElMessage({

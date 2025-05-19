@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import fun.yamds.mapper.UserMapper;
+import fun.yamds.mapper.UserRoleMapper;
 import fun.yamds.pojo.Result;
 import fun.yamds.pojo.UserPojo;
+import fun.yamds.pojo.UserRolePojo;
 import fun.yamds.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    UserRoleMapper userRoleMapper;
 
     @Override
     public Result getUser(UserPojo user) {
@@ -135,6 +140,8 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
     // service
     @Override
     public Result register(UserPojo user) {
+        UserRolePojo userRole = new UserRolePojo();
+
         if(user.getUsername() == null || user.getPassword() == null)
             return Result.error().msg("用户名或密码为null");
         // 加密
@@ -147,8 +154,20 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         user.setCreateTime(timestamp);
         user.setUpdateTime(timestamp);
 
-        if(userMapper.insert(user) != 0)
-            return Result.ok().msg("注册成功");
+
+
+        if(userMapper.insert(user) != 0) {
+            QueryWrapper<UserPojo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("username", user.getUsername());
+            UserPojo user2 = userMapper.selectOne(queryWrapper);
+            userRole.setUserId(user2.getId());
+            userRole.setRoleId(3L);
+            if(userRoleMapper.insert(userRole) != 0)
+                return Result.ok().msg("注册成功");
+            else
+                return Result.error().msg("注册失败: 插入用户角色关系失败！");
+        }
+
 
         return Result.error().msg("注册失败: 没有成功插入数据");
 
