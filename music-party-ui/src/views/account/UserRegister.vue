@@ -3,7 +3,7 @@
         <DocBlock :type="'info'" title="注册" icon="fa-solid:user" context="用户注册" />
         <el-divider content-position="left">注册</el-divider>
         <div class="edit_area">
-            <el-form :model="userForm" ref="ruleFormRef" :rules="rules" label-width="auto" style="max-width: 600px">
+            <el-form :model="userForm" ref="ruleFormRef" :rules="rules" label-width="6rem" style="max-width: 600px">
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="userForm.username" />
                 </el-form-item>

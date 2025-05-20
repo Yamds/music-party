@@ -30,7 +30,7 @@
                     <el-input v-model="changeInfo.name" placeholder="可以为空，则不修改此项" />
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input v-model="changeInfo.password" show-password=true placeholder="可以为空，则不修改此项" />
+                    <el-input v-model="changeInfo.password" show-password placeholder="可以为空，则不修改此项" />
                 </el-form-item>
                 <el-form-item label="">
                     <el-button type="primary" @click="store.changeUserInfo(changeInfo.name.trim(), changeInfo.password.trim())">保存</el-button>

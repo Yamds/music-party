@@ -1,6 +1,6 @@
 <template>
     <template v-for="menu in menuList" :key="menu.name">
-        <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="{ name: menu.name }"
+        <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="menu.path"
             class="menu-main-item">
             <template #title>
                 <el-icon>
@@ -11,7 +11,7 @@
             <menu-item :menu-list="menu.children"></menu-item>
         </el-sub-menu>
 
-        <el-menu-item v-else-if="!menu.meta.isAction" :index="{ name: menu.name }"
+        <el-menu-item v-else-if="!menu.meta.isAction" :index="menu.path"
             :class="menu.meta.isTop ? 'menu-sub-item2' : 'menu-sub-item1'">
             <el-icon>
                 <IconifyIcon :icon="menu.meta.icon" />

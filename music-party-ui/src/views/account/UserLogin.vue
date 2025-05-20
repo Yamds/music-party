@@ -3,12 +3,12 @@
         <DocBlock :type="'info'" title="登录" icon="fa-solid:user" context="这是一个登录页面" />
         <el-divider content-position="left">登录页</el-divider>
         <div class="edit_area">
-            <el-form :model="userInfo" label-width="auto" style="max-width: 600px">
+            <el-form :model="userInfo" label-width="4rem" style="max-width: 600px">
                 <el-form-item label="用户名">
                     <el-input v-model="userInfo.name" />
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input v-model="userInfo.password" show-password=true />
+                    <el-input v-model="userInfo.password" show-password />
                 </el-form-item>
                 <el-form-item label="">
                     <el-button type="primary" @click="userLogin" :loading="store.login_loading">登录</el-button>
