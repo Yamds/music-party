@@ -158,6 +158,7 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
 
 
         if(userMapper.insert(user) != 0) {
+            // 获取id，插入角色关系(3L 是 user)
             QueryWrapper<UserPojo> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("username", user.getUsername());
             UserPojo user2 = userMapper.selectOne(queryWrapper);

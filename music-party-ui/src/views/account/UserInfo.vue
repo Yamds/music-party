@@ -8,12 +8,14 @@
                 <span v-if="!userInfo.name">未获取</span>
             </el-descriptions-item>
             <el-descriptions-item label="网易云音乐">
-                <span v-if="userInfo.bind.netease">{{ userInfo.bind.netease }}</span>
-                <span v-if="!userInfo.bind.netease">未获取</span>
+                <span v-if="userInfo.bind.netease == null">获取失败</span>
+                <span v-else-if="userInfo.bind.netease == -1">尚未绑定</span>
+                <span v-else="!userInfo.bind.netease">{{ userInfo.bind.netease }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="bilibili">
-                <span v-if="userInfo.bind.bilibili">{{ userInfo.bind.bilibili }}</span>
-                <span v-if="!userInfo.bind.bilibili">未获取</span>
+                <span v-if="userInfo.bind.bilibili == null">获取失败</span>
+                <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
+                <span v-else="!userInfo.bind.bilibili">{{ userInfo.bind.bilibili }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="身份">
                 <el-tag size="small" v-if="userInfo.role != null && userInfo.role.length == 0">无身份</el-tag>
