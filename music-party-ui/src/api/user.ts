@@ -47,3 +47,6 @@ export const httpIsLogin = () =>
 
 export const httpUsernameExist = (username: string) =>
     request('get', `/user/checkUsername/${username}`);
+
+export const httpChangeUserInfo = (username: string, password: string) =>
+    request('post', '/user/changeUserInfo', { username, password });

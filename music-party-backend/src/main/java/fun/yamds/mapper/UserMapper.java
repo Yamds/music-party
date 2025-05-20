@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import fun.yamds.pojo.UserPojo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -39,4 +40,16 @@ public interface UserMapper extends BaseMapper<UserPojo> {
 
     @Select("SELECT username FROM user WHERE username = #{username}")
     String usernameExist(String username);  // 判断用户名是否存在    如果存在，返回名字 不存在返回null
+
+    @Update({
+            "<script>",
+            "UPDATE user",
+            "<set>",
+            "  <if test='username != null'>username = #{username},</if>",
+            "  <if test='password != null and password != \"\"'>password = #{password},</if>",
+            "</set>",
+            "WHERE id = #{id}",
+            "</script>"
+    })
+    int updateUserSelective(UserPojo user);
 }

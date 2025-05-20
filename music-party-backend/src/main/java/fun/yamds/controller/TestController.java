@@ -78,4 +78,12 @@ public class TestController {
         }
         return Result.ok().msg("用户名可用");
     }
+
+    @SaCheckLogin
+    @PostMapping("/changeUserInfo")
+    public Result changeUserInfo(@RequestBody UserPojo user) {
+        System.out.println("----------changeUserInfo");
+        user.setId(StpUtil.getLoginIdAsLong());
+        return userService.changeUserInfo(user);
+    }
 }

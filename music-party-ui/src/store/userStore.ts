@@ -116,12 +116,17 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
+    const changeUserInfo = async () => {
+
+    }
+
     return {
         isLogin,
         login_loading,
         userInfo,
         login,
         logout,
-        getUser
+        getUser,
+        changeUserInfo,
     }
 })

@@ -172,4 +172,9 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         return Result.error().msg("注册失败: 没有成功插入数据");
 
     }
+
+    @Override
+    public Result changeUserInfo(UserPojo user) {
+
+    }
 }

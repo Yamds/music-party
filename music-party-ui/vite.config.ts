@@ -11,7 +11,7 @@ export default defineConfig({
     ],
     server: {
         host: '0.0.0.0',    // 设置前端服务器ip地址
-        port: 8081,         // 设置前端端口号
+        port: 20721,         // 设置前端端口号
         hmr: true,          // 热更新
         open: false,        // 项目启动自动打开浏览器网页
     },

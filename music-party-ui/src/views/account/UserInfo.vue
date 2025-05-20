@@ -27,13 +27,13 @@
         <div class="edit_area">
             <el-form :model="userInfo" label-width="auto" style="max-width: 600px">
                 <el-form-item label="用户名">
-                    <el-input v-model="userInfo.name" />
+                    <el-input v-model="changeInfo.name" />
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input v-model="userInfo.password" />
+                    <el-input v-model="changeInfo.password" />
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button type="primary" @click="">保存</el-button>
+                    <el-button type="primary" @click="store.changeUserInfo()">保存</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -41,12 +41,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 import DocBlock from '@/components/DocBlock.vue';
 import { useUserStore } from '@/store/userStore';
 
 const store = useUserStore();
 const userInfo = computed(() => store.userInfo);
+
+const changeInfo = reactive({
+    name: "",
+    password: ""
+})
 
 </script>
 
