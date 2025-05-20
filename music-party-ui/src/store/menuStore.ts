@@ -14,6 +14,7 @@ export const useMenuStore = defineStore('menu', () => {
     let menuList = reactive<MenuInter[]>([
         {
             name: "dashboard",
+            path: '/dashboard',
             meta: {
                 title: "首页",
                 icon: "mingcute:music-3-fill",
@@ -22,6 +23,7 @@ export const useMenuStore = defineStore('menu', () => {
             }
         }, {
             name: "account",
+            path: '/account',
             meta: {
                 title: "账号管理",
                 icon: "ri:user-5-fill",
@@ -30,6 +32,7 @@ export const useMenuStore = defineStore('menu', () => {
             children: [
                 {
                     name: "user-info",
+                    path: '/account/info',
                     meta: {
                         title: "账号信息",
                         icon: "mingcute:user-info-fill",
@@ -37,6 +40,7 @@ export const useMenuStore = defineStore('menu', () => {
                     }
                 }, {
                     name: "user-login",
+                    path: '/account/login',
                     meta: {
                         title: "登录",
                         icon: "streamline:login-1-solid",
@@ -45,6 +49,7 @@ export const useMenuStore = defineStore('menu', () => {
                     }
                 }, {
                     name: "user-register",
+                    path: '/account/register',
                     meta: {
                         title: "注册",
                         icon: "mdi:register",
@@ -63,6 +68,7 @@ export const useMenuStore = defineStore('menu', () => {
             ]
         }, {
             name: "bind",
+            path: '/bind',
             meta: {
                 title: "账号歌单",
                 icon: "eos-icons:role-binding",
@@ -71,6 +77,7 @@ export const useMenuStore = defineStore('menu', () => {
             children: [
                 {
                     name: "bind-netease-music",
+                    path: '/bind/netease-music',
                     meta: {
                         title: "网易云音乐",
                         icon: "tabler:brand-netease-music",
@@ -78,6 +85,7 @@ export const useMenuStore = defineStore('menu', () => {
                     }
                 }, {
                     name: "bind-bilibili",
+                    path: '/bind/bilibili',
                     meta: {
                         title: "bilibili",
                         icon: "ri:bilibili-fill",
@@ -85,6 +93,7 @@ export const useMenuStore = defineStore('menu', () => {
                     }
                 }, {
                     name: "bind-song-list",
+                    path: '/bind/song-list',
                     meta: {
                         title: "收藏歌单",
                         icon: "streamline:music-folder-song",
@@ -102,6 +111,7 @@ export const useMenuStore = defineStore('menu', () => {
             ]
         }, {
             name: "room",
+            path: '/room',
             meta: {
                 title: "房间",
                 icon: "fluent:door-16-filled",
@@ -110,6 +120,7 @@ export const useMenuStore = defineStore('menu', () => {
             children: [
                 {
                     name: "add-room",
+                    path: '/room/add',
                     meta: {
                         title: "新建房间",
                         icon: "material-symbols-light:add-home-rounded",
@@ -117,6 +128,7 @@ export const useMenuStore = defineStore('menu', () => {
                     }
                 }, {
                     name: "enter-room",
+                    path: '/room/enter',
                     meta: {
                         title: "加入房间",
                         icon: "icon-park-solid:add-user",
@@ -134,6 +146,7 @@ export const useMenuStore = defineStore('menu', () => {
             ]
         }, {
             name: "backstage",
+            path: '/backstage',
             meta: {
                 title: "后台",
                 icon: "fluent:door-16-filled",

@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author ：Yamds
@@ -59,7 +60,7 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
     @Override
     public Result login (UserPojo user) {
         try {
-            Thread.sleep(2000); // 延时 5 秒（5000 毫秒）
+            Thread.sleep(1000); // 延时 1 秒（1000 毫秒）
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // 恢复中断状态
             return Result.error().msg("线程被中断");
@@ -175,6 +176,27 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
 
     @Override
     public Result changeUserInfo(UserPojo user) {
-
+        // 用户名检查
+        if(Objects.equals(user.getUsername(), ""))
+            user.setUsername(null);
+        else {
+            if(userMapper.usernameExist(user.getUsername()) != null)
+                return Result.error().msg("修改失败: 已存在相同用户名");
+        }
+        // 密码检查
+        if(Objects.equals(user.getPassword(), ""))
+            user.setPassword(null);
+        else {
+            // 密码加密
+            user.setPassword(BCrypt.hashpw(user.getPassword()));
+        }
+        if(user.getId() == null || user.getId() == 0)
+            return Result.error().msg("id为空！");
+        int rows = userMapper.updateById(user); // 调用 updateById 方法
+        if (rows > 0) {
+            return Result.ok().msg("修改成功！");
+        } else {
+            return Result.error().msg("修改失败！");
+        }
     }
 }

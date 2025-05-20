@@ -6,7 +6,8 @@
             </el-tooltip>
         </div>
         <div class="hello-user">
-            <span>Hello，{{ userInfo.name }}！</span>
+            <span v-if="userInfo.name.length > 0">Hello，{{ userInfo.name }}！</span>
+            <span v-else >Welcome！</span>
         </div>
     </div>
 </template>

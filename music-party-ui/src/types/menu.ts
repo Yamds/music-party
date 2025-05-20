@@ -1,5 +1,6 @@
 export interface MenuInter {
     name: String,
+    path?: String,
     meta: {
         title: String,
         icon: String,

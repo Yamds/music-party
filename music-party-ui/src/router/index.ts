@@ -19,6 +19,7 @@ const routes: Array<RouteRecordRaw> = [
                     title: '首页',
                     icon: 'mingcute:music-3-fill',
                     permission: [],
+                    isTop: true,
                 }
             }
         ]
@@ -88,7 +89,9 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'bind-song-list',
                 meta: {
                     title: '歌单收藏',
-                    icon: 'streamline:music-folder-song'
+                    icon: 'streamline:music-folder-song',
+                    permission: [],
+                    isAction: true,
                 }
             }
 
@@ -106,7 +109,8 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'add-room',
                 meta: {
                     title: '新建房间',
-                    icon: 'material-symbols-light:add-home-rounded'
+                    icon: 'material-symbols-light:add-home-rounded',
+                    permission: [],
                 }
             }, {
                 path: '/room/enter',
@@ -114,10 +118,10 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'enter-room',
                 meta: {
                     title: '加入房间',
-                    icon: 'icon-park-solid:add-user'
+                    icon: 'icon-park-solid:add-user',
+                    permission: [],
                 }
             }
-
         ]
     }, {
         path: '/backstage',

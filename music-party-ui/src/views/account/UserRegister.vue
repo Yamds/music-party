@@ -58,8 +58,8 @@ const checkPassword = (_rule: any, value: any, callback: any) => {
     if (value === '') {
         return callback(new Error('请输入密码！'));
     }
-    if (value.length < 6) {
-        return callback(new Error('密码长度不能少于6位'));
+    if (value.length < 6 || value.length > 36) {
+        return callback(new Error('密码长度在6~32位之间!'));
     }
 
     const hasLower = /[a-z]/.test(value);  // 小写字母

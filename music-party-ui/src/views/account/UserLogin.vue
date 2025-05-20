@@ -8,7 +8,7 @@
                     <el-input v-model="userInfo.name" />
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input v-model="userInfo.password" />
+                    <el-input v-model="userInfo.password" show-password=true />
                 </el-form-item>
                 <el-form-item label="">
                     <el-button type="primary" @click="userLogin" :loading="store.login_loading">登录</el-button>

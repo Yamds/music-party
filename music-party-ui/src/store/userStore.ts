@@ -2,9 +2,10 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 
 import { type returnUserInfoInter, type UserInfoInter, newUserInfo } from "@/types/account";
-import { httpGetUserByLogin, httpIsLogin, httpLogin, httpLogout } from "@/api/user"
+import { httpChangeUserInfo, httpGetUserByLogin, httpIsLogin, httpLogin, httpLogout } from "@/api/user"
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+// import UserInfo from "@/views/account/UserInfo.vue";
 
 // 定义一个store
 export const useUserStore = defineStore('user', () => {
@@ -116,8 +117,71 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    const changeUserInfo = async () => {
+    const changeUserInfo = (username: string, password: string) => {
+        if (username == "" && password == "") {
+            ElMessage({
+                    message: "如需修改，请至少填写一项！",
+                    type: 'warning',
+                })
+            return
+        }
+        // 校验用户名
+        if (username != "") {
+            if (username.length < 3 || username.length > 32) {
+                ElMessage({
+                    message: "用户名长度在3~32之间！",
+                    type: 'warning',
+                })
+                return
+            }
+            if (username == userInfo.name) {
+                ElMessage({
+                    message: "修改的用户名与当前一致！",
+                    type: 'warning',
+                })
+                return
+            }
+        }
+        // 校验密码
+        if (password != "") {
+            if (password.length < 6 || password.length > 32) {
+                ElMessage({
+                    message: "密码长度在6~32之间！",
+                    type: 'warning',
+                })
+                return
+            }
+            const hasLower = /[a-z]/.test(password);  // 小写字母
+            const hasUpper = /[A-Z]/.test(password);  // 大写字母
+            const hasNumber = /\d/.test(password);    // 数字
+            const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password); // 特殊符号
 
+            const categoryCount = [hasLower, hasUpper, hasNumber, hasSpecial].filter(Boolean).length;
+
+            if (categoryCount < 2) {
+                ElMessage({
+                    message: "密码需包含大写、小写字母、数字、符号中的至少两项！",
+                    type: 'warning',
+                })
+                return
+            }
+        }
+
+
+        httpChangeUserInfo(username, password).then(data => {
+            if (data.success) {
+                ElMessage({
+                        message: data.msg.toString(),
+                        type: 'success',
+                    })
+            } else {
+                ElMessage({
+                        message: data.msg.toString(),
+                        type: 'error',
+                    })
+            }
+            getUser()
+        })
     }
 
     return {
