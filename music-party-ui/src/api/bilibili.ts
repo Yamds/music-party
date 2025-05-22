@@ -4,7 +4,7 @@ import type { BilibiliReturnInter } from "@/types/bilibili";
 // 详细响应格式请参考:
 // https://github.com/SocialSisterYi/bilibili-API-collect
 
-const SESSDATA = "66b1d216%2C1762819335%2C21e94%2A51CjDoGQAiXM-whu4n9FFR4AM7hhKqjm7TELCzaVSyV4x9W5XevS6sD-X74k0Mo1dxO-sSVkdVMXZhamFRS1J3ZXVuWUEySzc1N0VFUVVOOThqMTIxOU5tT3J1cTRTTkRTT3ZqQVA4MWdTdTZhdXhmNlRkd2R2MWMzbzUwaWlVM1pRN2Z1UWR4WWN3IIEC"
+const SESSDATA = "SESSDATA=66b1d216%2C1762819335%2C21e94%2A51CjDoGQAiXM-whu4n9FFR4AM7hhKqjm7TELCzaVSyV4x9W5XevS6sD-X74k0Mo1dxO-sSVkdVMXZhamFRS1J3ZXVuWUEySzc1N0VFUVVOOThqMTIxOU5tT3J1cTRTTkRTT3ZqQVA4MWdTdTZhdXhmNlRkd2R2MWMzbzUwaWlVM1pRN2Z1UWR4WWN3IIEC"
 const cookies = ""
 
 const axiosInstance = axios.create({
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
     withCredentials: true,  // 允许跨域携带Cookie
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0',
-        'Cookies': cookies,
+        'Cookie': SESSDATA + ";" + cookies + ";",
     }
 })
 
