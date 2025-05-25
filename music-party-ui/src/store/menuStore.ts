@@ -124,7 +124,7 @@ export const useMenuStore = defineStore('menu', () => {
                     meta: {
                         title: "新建房间",
                         icon: "material-symbols-light:add-home-rounded",
-                        permission: [],
+                        permission: ["user:room"],
                     }
                 }, {
                     name: "enter-room",
@@ -132,14 +132,14 @@ export const useMenuStore = defineStore('menu', () => {
                     meta: {
                         title: "加入房间",
                         icon: "icon-park-solid:add-user",
-                        permission: [],
+                        permission: ["user:room"],
                     }
                 }, {
                     name: "leave-room",
                     meta: {
                         title: "退出房间",
                         icon: "pepicons-pop:leave",
-                        permission: [],
+                        permission: ["user:room"],
                         isAction: true,
                     }
                 },
@@ -150,9 +150,28 @@ export const useMenuStore = defineStore('menu', () => {
             meta: {
                 title: "后台",
                 icon: "fluent:door-16-filled",
-                isTop: true,
-                permission: ["admin:info"],
-            }
+                permission: ["master:backstage"],
+            },
+            children: [
+                {
+                    name: "user-manager",
+                    path: '/backstage/user-manager',
+                    meta: {
+                        title: "用户管理",
+                        icon: "fluent:door-16-filled",
+                        permission: ["master:backstage"],
+                    }
+                },
+                {
+                    name: "api-config",
+                    path: '/backstage/api-config',
+                    meta: {
+                        title: "api配置",
+                        icon: "fluent:door-16-filled",
+                        permission: ["master:backstage"],
+                    }
+                }
+            ]
         }
     ])
 

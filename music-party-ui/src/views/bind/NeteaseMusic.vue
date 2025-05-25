@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main-window">
         <DocBlock :type="'info'" title="网易云音乐" icon="fa-solid:user" context="绑定信息、点歌~" />
         <el-divider content-position="left">网易云音乐用户绑定</el-divider>
         <el-input v-model="bind_name" style="width: 240px" placeholder="可反复绑定哦~" />
@@ -14,10 +14,6 @@ const bind_name = ref('')
 </script>
 
 <style scoped>
-.main {
-    margin: 2rem;
-}
-
 .el-descriptions * {
     background-color: var(--el-bg-color);
 }

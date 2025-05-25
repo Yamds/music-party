@@ -8,20 +8,28 @@ body,
     background-color: var(--el-bg-color);
 }
 
+.main-window {
+    margin: 2rem;
+}
+
 * {
     font-family: 'MyCustomFont';
     color: var(--el-text-color-primary);
 }
-.el-button.el-button--primary *{
+
+.el-button.el-button--primary * {
     color: var(--el-color-primary);
     transition: all 0.5s;
 }
-.el-button.el-button--primary *:hover{
+
+.el-button.el-button--primary *:hover {
     color: var(--el-bg-color);
 }
-.el-button.el-button--primary:not(.is-plain):not(.is-round):not(.is-circle) *{
+
+.el-button.el-button--primary:not(.is-plain):not(.is-round):not(.is-circle) * {
     color: var(--el-bg-color);
 }
+
 // button * {
 //     color: var(--el-bg-color);
 // }
@@ -85,16 +93,19 @@ body,
 .el-tabs__item:hover .is-icon-close {
     opacity: 1;
 }
+
 .el-message:not(.el-message--warning):not(.el-message--success):not(.el-message--error) i * {
     color: var(--el-text-color-primary);
 }
 
-.el-message.el-message--warning i *{
+.el-message.el-message--warning i * {
     color: var(--el-color-peach);
 }
-.el-message.el-message--success i *{
+
+.el-message.el-message--success i * {
     color: var(--el-color-green);
 }
-.el-message.el-message--error i *{
+
+.el-message.el-message--error i * {
     color: var(--el-color-red);
 }

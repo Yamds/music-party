@@ -1,6 +1,6 @@
 <template>
-    <div>
-
+    <div class="main-window">
+        addroom
     </div>
 </template>
 

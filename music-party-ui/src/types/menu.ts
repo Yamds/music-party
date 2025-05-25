@@ -1,13 +1,13 @@
 export interface MenuInter {
-    name: String,
-    path?: String,
+    name: string,
+    path?: string,
     meta: {
-        title: String,
-        icon: String,
-        permission: String[],
-        isTop?: Boolean,
-        isLogin?: Boolean,
-        isAction?: Boolean,
+        title: string,
+        icon: string,
+        permission: string[],
+        isTop?: boolean,
+        isLogin?: boolean,
+        isAction?: boolean,
     },
     children?: MenuInter[],
 }

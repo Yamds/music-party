@@ -10,6 +10,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import '@/styles/global.scss'
 import '@/styles/theme/catppuccin.scss'
 import { Icon as IconifyIcon } from '@iconify/vue'
+import VueQrcode from 'vue-qrcode'
 
 const pinia = createPinia()
 const app = createApp(App);
@@ -18,6 +19,7 @@ app.use(router)
 app.use(ElementPlus)
 app.use(pinia)
 app.component('IconifyIcon', IconifyIcon) // 全局注册
+app.component('vue-qrcode', VueQrcode)
 pinia.use(piniaPluginPersistedstate)
 
 app.mount('#app')

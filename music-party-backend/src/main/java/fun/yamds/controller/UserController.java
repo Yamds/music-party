@@ -3,15 +3,12 @@ package fun.yamds.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SaResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import fun.yamds.pojo.Result;
 import fun.yamds.pojo.UserPojo;
 import fun.yamds.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 /**
  * @author ：Yamds
@@ -21,7 +18,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
-public class TestController {
+public class UserController {
 
     @Autowired
     UserService userService;

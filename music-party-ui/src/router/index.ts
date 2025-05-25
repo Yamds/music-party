@@ -110,7 +110,7 @@ const routes: Array<RouteRecordRaw> = [
                 meta: {
                     title: '新建房间',
                     icon: 'material-symbols-light:add-home-rounded',
-                    permission: [],
+                    permission: ["user:room"],
                 }
             }, {
                 path: '/room/enter',
@@ -119,7 +119,7 @@ const routes: Array<RouteRecordRaw> = [
                 meta: {
                     title: '加入房间',
                     icon: 'icon-park-solid:add-user',
-                    permission: [],
+                    permission: ["user:room"],
                 }
             }
         ]
@@ -127,7 +127,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/backstage',
         name: 'backstage',
         component: Layout,
-        meta: { permission: ["admin:info"] },
+        meta: { permission: ["master:backstage"] },
         redirect: '/backstage',
         children: [
             {
@@ -136,6 +136,15 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'user-manager',
                 meta: {
                     title: '用户管理',
+                    icon: 'material-symbols-light:add-home-rounded'
+                }
+            },
+            {
+                path: '/backstage/api-config',
+                component: () => import('@/views/backstage/ApiConfig.vue'),
+                name: 'api-config',
+                meta: {
+                    title: 'api配置',
                     icon: 'material-symbols-light:add-home-rounded'
                 }
             }

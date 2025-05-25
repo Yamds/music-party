@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main-window">
         <DocBlock :type="'info'" title="注册" icon="fa-solid:user" context="用户注册" />
         <el-divider content-position="left">注册</el-divider>
         <div class="edit_area">
@@ -25,7 +25,7 @@
 import { ref, reactive } from 'vue';
 import DocBlock from '@/components/DocBlock.vue';
 import { type FormInstance, type FormRules } from 'element-plus'
-import { httpRegister, httpUsernameExist } from '@/api/user';
+import { httpRegister, httpUsernameExist } from '@/api/userApi';
 import { ElMessage } from 'element-plus'
 
 const ruleFormRef = ref<FormInstance>()
@@ -125,8 +125,4 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 </script>
 
-<style scoped>
-.main {
-    margin: 2rem;
-}
-</style>
+<style scoped></style>

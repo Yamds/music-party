@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main-window">
         <DocBlock :type="'info'" title="登录" icon="fa-solid:user" context="这是一个登录页面" />
         <el-divider content-position="left">登录页</el-divider>
         <div class="edit_area">
@@ -53,8 +53,4 @@ const userLogin = () => {
 
 </script>
 
-<style scoped>
-.main {
-    margin: 2rem;
-}
-</style>
+<style scoped></style>

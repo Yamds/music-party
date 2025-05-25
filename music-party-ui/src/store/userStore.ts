@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 
 import { type returnUserInfoInter, type UserInfoInter, newUserInfo } from "@/types/account";
-import { httpChangeUserInfo, httpGetUserByLogin, httpIsLogin, httpLogin, httpLogout } from "@/api/user"
+import { httpChangeUserInfo, httpGetUserByLogin, httpIsLogin, httpLogin, httpLogout } from "@/api/userApi"
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 // import UserInfo from "@/views/account/UserInfo.vue";
@@ -90,6 +90,7 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
+    // 页面刷新，路由筛选那边会调用一次
     const getUser = async (): Promise<void> => {
         return httpGetUserByLogin().then(data => {
             // 成功: 置为get到的user，
@@ -120,9 +121,9 @@ export const useUserStore = defineStore('user', () => {
     const changeUserInfo = (username: string, password: string) => {
         if (username == "" && password == "") {
             ElMessage({
-                    message: "如需修改，请至少填写一项！",
-                    type: 'warning',
-                })
+                message: "如需修改，请至少填写一项！",
+                type: 'warning',
+            })
             return
         }
         // 校验用户名
@@ -171,14 +172,14 @@ export const useUserStore = defineStore('user', () => {
         httpChangeUserInfo(username, password).then(data => {
             if (data.success) {
                 ElMessage({
-                        message: data.msg.toString(),
-                        type: 'success',
-                    })
+                    message: data.msg.toString(),
+                    type: 'success',
+                })
             } else {
                 ElMessage({
-                        message: data.msg.toString(),
-                        type: 'error',
-                    })
+                    message: data.msg.toString(),
+                    type: 'error',
+                })
             }
             getUser()
         })

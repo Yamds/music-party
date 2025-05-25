@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main-window">
         <DocBlock :type="'info'" title="个人信息" icon="fa-solid:user" context="用户个人资料信息" />
         <el-divider content-position="left">个人信息</el-divider>
         <el-descriptions title="" :column=1>
@@ -35,7 +35,8 @@
                     <el-input v-model="changeInfo.password" show-password placeholder="可以为空，则不修改此项" />
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button type="primary" @click="store.changeUserInfo(changeInfo.name.trim(), changeInfo.password.trim())">保存</el-button>
+                    <el-button type="primary"
+                        @click="store.changeUserInfo(changeInfo.name.trim(), changeInfo.password.trim())">保存</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -58,10 +59,6 @@ const changeInfo = reactive({
 </script>
 
 <style scoped>
-.main {
-    margin: 2rem;
-}
-
 .el-descriptions * {
     background-color: var(--el-bg-color);
 }

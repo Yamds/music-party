@@ -1,25 +1,25 @@
 export interface UserInfoInter {
-    id: String,
-    name: String,
-    password: String,
+    id: string,
+    name: string,
+    password: string,
     bind: {
-        netease: Number,
-        bilibili: Number,
+        netease: number,
+        bilibili: number,
     },
-    role: String[],
-    permission: String[],
+    role: string[],
+    permission: string[],
 }
 
 export interface returnUserInfoInter {
     user: {
-        id: String,
-        username: String,
-        password: String,
-        neteaseId: Number,
-        biliId: Number,
+        id: string,
+        username: string,
+        password: string,
+        neteaseId: number,
+        biliId: number,
     }
-    role_name: String[],
-    permission_name: String[],
+    role_name: string[],
+    permission_name: string[],
 }
 
 

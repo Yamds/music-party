@@ -1,6 +1,6 @@
 export interface ResultInter {
-    success: Boolean,
-    code: Number,
-    msg: String
-    data?: Object
+    success: boolean,
+    code: number,
+    msg: string
+    data?: object
 }

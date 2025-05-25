@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd"
+     profiles="urn:mpeg:dash:profile:isoff-on-demand:2011"
+     type="static"
+     mediaPresentationDuration="PT32.0S"
+     minBufferTime="PT1.5S">
+    <Period id="0" start="PT0.0S">
+        <!-- 视频自适应集 -->
+        <AdaptationSet id="video" mimeType="video/mp4" codecs="avc1.640032,avc1.640028,avc1.64001F,avc1.64001E,hev1.1.6.L150.90,hev1.1.6.L120.90" segmentAlignment="true" startWithSAP="1">
+            <!-- 1080P AVC视频 -->
+            <Representation id="video-1080p-avc" mimeType="video/mp4" codecs="avc1.640032" bandwidth="912705" width="1920" height="1080" frameRate="16000/672" sar="1:1">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=cos&upsig=70d3a2db2a627f470f29d22bd7a80902&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=116196&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1008-1111">
+                    <Initialization range="0-1007"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 1080P HEVC视频 -->
+            <Representation id="video-1080p-hevc" mimeType="video/mp4" codecs="hev1.1.6.L150.90" bandwidth="625793" width="1920" height="1080" frameRate="16000/672" sar="1:1">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30077.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=1cfb1b368a7719e1d7fb553f53dca8e1&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=79670&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1170-1273">
+                    <Initialization range="0-1169"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 720P AVC视频 -->
+            <Representation id="video-720p-avc" mimeType="video/mp4" codecs="avc1.640028" bandwidth="537386" width="1280" height="720" frameRate="16000/672" sar="1:1">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30064.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=fa857830fb7d5dd8cbe771121fc7c06d&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=68414&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1007-1110">
+                    <Initialization range="0-1006"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 720P HEVC视频 -->
+            <Representation id="video-720p-hevc" mimeType="video/mp4" codecs="hev1.1.6.L120.90" bandwidth="383627" width="1280" height="720" frameRate="16000/672" sar="1:1">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30066.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=cos&upsig=fa2a07b443e0b048192bf6d2298b723b&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=48839&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1170-1273">
+                    <Initialization range="0-1169"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 480P AVC视频 -->
+            <Representation id="video-480p-avc" mimeType="video/mp4" codecs="avc1.64001F" bandwidth="416020" width="852" height="480" frameRate="16000/672" sar="640:639">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30032.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=7bd2f50f2bc7f2b437d3c2bff48e1fcf&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=52963&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1011-1114">
+                    <Initialization range="0-1010"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 480P HEVC视频 -->
+            <Representation id="video-480p-hevc" mimeType="video/mp4" codecs="hev1.1.6.L120.90" bandwidth="310121" width="852" height="480" frameRate="16000/672" sar="640:639">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30033.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=9f52ce56d206eefaab00d75e099761c0&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=39481&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1174-1277">
+                    <Initialization range="0-1173"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 360P HEVC视频 -->
+            <Representation id="video-360p-hevc" mimeType="video/mp4" codecs="hev1.1.6.L120.90" bandwidth="217235" width="640" height="360" frameRate="16000/672" sar="1:1">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30011.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=c65027e2eac127a34f2255a686727e5f&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=27656&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1170-1273">
+                    <Initialization range="0-1169"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 360P AVC视频 -->
+            <Representation id="video-360p-avc" mimeType="video/mp4" codecs="avc1.64001E" bandwidth="320424" width="640" height="360" frameRate="16000/672" sar="1:1">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30016.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=74081c89039ef5d3d82ab62a8898cd2f&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=40793&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="1015-1118">
+                    <Initialization range="0-1014"/>
+                </SegmentBase>
+            </Representation>
+        </AdaptationSet>
+        
+        <!-- 音频自适应集 -->
+        <AdaptationSet id="audio" mimeType="audio/mp4" codecs="mp4a.40.5,mp4a.40.2" segmentAlignment="true" startWithSAP="0">
+            <!-- 低码率音频 -->
+            <Representation id="audio-128k" mimeType="audio/mp4" codecs="mp4a.40.5" bandwidth="31911">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30216.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=d7bdaf9505b1cdbda63aba91cea0ecd7&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=4081&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="944-1059">
+                    <Initialization range="0-943"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 中码率音频 -->
+            <Representation id="audio-192k" mimeType="audio/mp4" codecs="mp4a.40.2" bandwidth="68160">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30232.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=hw&upsig=bdfed5ed549edd372ef7dc22c8bf9e25&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=8698&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="934-1049">
+                    <Initialization range="0-933"/>
+                </SegmentBase>
+            </Representation>
+            
+            <!-- 高码率音频 -->
+            <Representation id="audio-256k" mimeType="audio/mp4" codecs="mp4a.40.2" bandwidth="78768">
+                <BaseURL>https://cn-tj-cu-01-04.bilivideo.com/upgcxcode/73/91/1310149173/1310149173_u1-1-30280.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&uipk=5&nbs=1&deadline=1748039680&gen=playurlv2&os=bcache&oi=0&trid=00005a28263925fd437395c551e19fce6133T&mid=220675708&platform=html5&og=cos&upsig=a9856bc534063f2963d4dc59ed107f36&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,mid,platform,og&cdnid=87204&bvc=vod&nettype=0&bw=10051&orderid=0,1&buvid=&build=0&mobi_app=&f=T_0_0&logo=80000000</BaseURL>
+                <SegmentBase indexRange="934-1049">
+                    <Initialization range="0-933"/>
+                </SegmentBase>
+            </Representation>
+        </AdaptationSet>
+    </Period>
+</MPD>    

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-window">
         s
     </div>
 </template>
@@ -8,6 +8,4 @@
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

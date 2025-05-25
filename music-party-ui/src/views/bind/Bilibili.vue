@@ -1,5 +1,5 @@
 <template>
-    <div class="main">
+    <div class="main-window">
         <DocBlock :type="'info'" title="哔哩哔哩" icon="fa-solid:user" context="绑定信息、点歌~" />
         <el-divider content-position="left">b站用户绑定</el-divider>
         <el-descriptions title="" :column=1>
@@ -22,9 +22,6 @@ const bind_name = ref('')
 </script>
 
 <style scoped>
-.main {
-    margin: 2rem;
-}
 .el-descriptions * {
     background-color: var(--el-bg-color);
 }
