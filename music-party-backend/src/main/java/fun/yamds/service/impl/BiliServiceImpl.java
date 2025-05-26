@@ -1,17 +1,13 @@
 package fun.yamds.service.impl;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import fun.yamds.mapper.BiliMapper;
-import fun.yamds.pojo.BiliApiResponsePojo;
-import fun.yamds.pojo.BiliCookiePojo;
-import fun.yamds.pojo.Result;
+import fun.yamds.mapper.BiliCookieMapper;
+import fun.yamds.pojo.*;
 import fun.yamds.service.BiliService;
+import fun.yamds.service.UserService;
 import fun.yamds.utils.JsonObjParseUtils;
 import fun.yamds.utils.HttpUtils;
 import fun.yamds.utils.ObjMapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
@@ -20,19 +16,27 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class BiliServiceImpl extends ServiceImpl<BaseMapper<BiliCookiePojo>, BiliCookiePojo> implements BiliService {
+public class BiliServiceImpl implements BiliService {
     @Autowired
-    private BiliMapper biliMapper;
+    private BiliCookieMapper biliCookieMapper;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private BiliuserServiceImpl biliuserServiceImpl;
 
     // 封装一个请求
     @Autowired
     private HttpUtils httpUtils;
+    @Autowired
+    private UserService userService;
 
     @Override
     public Result saveCookie(BiliCookiePojo bili) {
         if(bili.getCookieName() != null && !bili.getCookieName().isEmpty()) {
             if(bili.getCookieContext() != null && !bili.getCookieContext().isEmpty()) {
-                int rows = biliMapper.updateById(bili);
+                int rows = biliCookieMapper.updateById(bili);
                 if(rows > 0) {
                     return Result.ok().msg("Bilibili " + bili.getCookieName() + "更新成功！");
                 } else {
@@ -49,7 +53,7 @@ public class BiliServiceImpl extends ServiceImpl<BaseMapper<BiliCookiePojo>, Bil
         if(bili.getCookieName() != null && bili.getCookieContext() != null)
             return Result.error().msg("传参Cookie名字为空");
 
-        BiliCookiePojo cookiePojo = biliMapper.selectById(bili.getCookieName());
+        BiliCookiePojo cookiePojo = biliCookieMapper.selectById(bili.getCookieName());
         if(cookiePojo != null) {
             bili.setCookieContext(cookiePojo.getCookieContext());
             HashMap<String, Object> map = new HashMap<>();
@@ -62,7 +66,7 @@ public class BiliServiceImpl extends ServiceImpl<BaseMapper<BiliCookiePojo>, Bil
 
     @Override
     public Result getAllCookie() {
-        List<BiliCookiePojo> biliCookiePojos = biliMapper.selectList(null);
+        List<BiliCookiePojo> biliCookiePojos = biliCookieMapper.selectList(null);
         HashMap<String, Object> map = new HashMap<>();
         StringBuilder cookie = new StringBuilder();
         for(BiliCookiePojo biliCookiePojo : biliCookiePojos)
@@ -72,6 +76,19 @@ public class BiliServiceImpl extends ServiceImpl<BaseMapper<BiliCookiePojo>, Bil
             return Result.ok().data(map).msg("成功获取Cookie");
         }
         return Result.error().msg("未能获取Cookie");
+    }
+
+    @Override
+    public Result saveBiliUser(BiliuserPojo biliuserPojo, UserPojo userPojo) {
+        if(biliuserPojo != null && userPojo != null) {
+            boolean r1 = biliuserServiceImpl.saveOrUpdate(biliuserPojo);
+            boolean r2 = userServiceImpl.saveOrUpdate(userPojo);
+            if(r1 && r2) {
+                return Result.ok().msg("成功存储bili绑定数据");
+            }
+            return Result.error().msg("bili绑定数据存储失败");
+        }
+        return Result.error().msg("bili绑定对象为空");
     }
 
     @Override

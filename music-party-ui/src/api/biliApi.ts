@@ -43,6 +43,9 @@ export const httpSaveSessdata = (sessdata: string) =>
 export const httpGetSessdata = () =>
     request('get', '/bili/sessdata');
 
+export const httpBindBiliUser = (userId: string, biliId: string, biliName: string, biliPic: string) =>
+    request('post', '/bili/bind', { user_id: userId, bili_id: biliId, bili_name: biliName, bili_pic: biliPic})
+
 export const httpGetQrCode = () =>
     request('get', '/bili/qrcode');
 

@@ -4,21 +4,23 @@
         <el-divider content-position="left">b站用户绑定</el-divider>
         <el-descriptions title="" :column=1>
             <el-descriptions-item label="用户名">
-                <span>尚未绑定</span>
+                <span v-if="userInfo.bind.bilibili == null">获取失败</span>
+                <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
+                <span v-else="!userInfo.bind.bilibili">{{ userBindName.biliName }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="bid">
-                <span>尚未绑定</span>
+                <span v-if="userInfo.bind.bilibili == null">获取失败</span>
+                <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
+                <span v-else="!userInfo.bind.bilibili">{{ userInfo.bind.bilibili }}</span>
             </el-descriptions-item>
         </el-descriptions>
         <div class="username-search">
             <el-input v-model="bind_name" style="width: 240px" placeholder="请输入b站用户名: 可反复绑定哦~" />
-            <el-button type="primary" @click="store.bindnameSearch(bind_name)">搜索</el-button>
-            <div>
-                <ul>
-                    <li v-for="item in store.bindnameList?.result">
-                        {{ item }}
-                    </li>
-                </ul>
+            <el-button type="primary" @click="biliStore.bindnameSearch(bind_name)">搜索</el-button>
+            <div class="username-list">
+                <el-tag v-for="item in biliStore.bindnameList?.result" size="large" @click="biliStore.bindBiliuser(item.mid, item.uname, item.upic)">
+                    {{ item.uname }}
+                </el-tag>
             </div>
         </div>
 
@@ -28,11 +30,17 @@
 <script setup lang="ts">
 import DocBlock from '@/components/DocBlock.vue';
 import { useBiliStore } from '@/store/biliStore';
-import { ref } from 'vue';
+import { useUserStore } from '@/store/userStore';
+import { computed, ref } from 'vue';
+
+const biliStore = useBiliStore()
+const userStore = useUserStore()
 
 const bind_name = ref('')
 
-const store = useBiliStore()
+const userInfo = computed(() => userStore.userInfo)
+const userBindName = computed(() => userStore.userBindName)
+
 </script>
 
 <style scoped>
@@ -42,5 +50,9 @@ const store = useBiliStore()
 
 .username-search>* {
     margin-right: 1rem;
+}
+
+.username-list .el-tag {
+    margin: 0.25rem;
 }
 </style>

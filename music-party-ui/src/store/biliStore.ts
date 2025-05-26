@@ -2,7 +2,8 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { BiliBackstageReturnInter, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter, BiliSearchTypeUserReturnInter } from '@/types/bilibili';
-import { httpBindnameSearch, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
+import { httpBindBiliUser, httpBindnameSearch, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
+import { useUserStore } from './userStore';
 
 
 export const useBiliStore = defineStore('bili', () => {
@@ -36,6 +37,20 @@ export const useBiliStore = defineStore('bili', () => {
             if (data.success) {
                 const temp = data.data as BiliBackstageReturnInter
                 sessdata.value = temp.bili_config?.cookieContext as string
+            } else {
+                ElMessage.error(data.msg)
+            }
+        })
+    }
+
+    const bindBiliuser = async (biliId: string, biliName: string, biliPic: string) => {
+        const userId = useUserStore().userInfo.id
+        await httpBindBiliUser(userId, biliId, biliName, biliPic).then(data => {
+            if (data.success) {
+                useUserStore().userBindName.biliName = biliName
+                useUserStore().getUser()
+                bindnameList.value = {}
+                ElMessage.success("bili绑定成功！")
             } else {
                 ElMessage.error(data.msg)
             }
@@ -140,5 +155,6 @@ export const useBiliStore = defineStore('bili', () => {
         getSessdata,
         getQrCode,
         bindnameSearch,
+        bindBiliuser,
     }
 })

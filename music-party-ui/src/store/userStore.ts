@@ -25,6 +25,11 @@ export const useUserStore = defineStore('user', () => {
         permission: [],
     })
 
+    const userBindName = reactive({
+        biliName: "",
+        neteaseName: "",
+    })
+
     const setIsLogin = async () => {
         httpIsLogin().then(data => {
             if (data.success) {
@@ -98,7 +103,7 @@ export const useUserStore = defineStore('user', () => {
             if (data.success) {
                 // 更新本地userinfo
                 const user_data = data.data as returnUserInfoInter
-                userInfo.id = user_data.user.id.toString()
+                userInfo.id = user_data.user.id
                 userInfo.name = user_data.user.username
                 userInfo.bind.bilibili = user_data.user.biliId
                 userInfo.bind.netease = user_data.user.neteaseId
@@ -120,36 +125,24 @@ export const useUserStore = defineStore('user', () => {
 
     const changeUserInfo = (username: string, password: string) => {
         if (username == "" && password == "") {
-            ElMessage({
-                message: "如需修改，请至少填写一项！",
-                type: 'warning',
-            })
+            ElMessage.warning("如需修改，请至少填写一项！")
             return
         }
         // 校验用户名
         if (username != "") {
             if (username.length < 3 || username.length > 32) {
-                ElMessage({
-                    message: "用户名长度在3~32之间！",
-                    type: 'warning',
-                })
+                ElMessage.warning("用户名长度在3~32之间！")
                 return
             }
             if (username == userInfo.name) {
-                ElMessage({
-                    message: "修改的用户名与当前一致！",
-                    type: 'warning',
-                })
+                ElMessage.warning("修改的用户名与当前一致！")
                 return
             }
         }
         // 校验密码
         if (password != "") {
             if (password.length < 6 || password.length > 32) {
-                ElMessage({
-                    message: "密码长度在6~32之间！",
-                    type: 'warning',
-                })
+                ElMessage.warning("密码长度在6~32之间！")
                 return
             }
             const hasLower = /[a-z]/.test(password);  // 小写字母
@@ -160,10 +153,7 @@ export const useUserStore = defineStore('user', () => {
             const categoryCount = [hasLower, hasUpper, hasNumber, hasSpecial].filter(Boolean).length;
 
             if (categoryCount < 2) {
-                ElMessage({
-                    message: "密码需包含大写、小写字母、数字、符号中的至少两项！",
-                    type: 'warning',
-                })
+                ElMessage.warning("密码需包含大写、小写字母、数字、符号中的至少两项！")
                 return
             }
         }
@@ -171,21 +161,16 @@ export const useUserStore = defineStore('user', () => {
 
         httpChangeUserInfo(username, password).then(data => {
             if (data.success) {
-                ElMessage({
-                    message: data.msg.toString(),
-                    type: 'success',
-                })
+                ElMessage.success(data.msg)
             } else {
-                ElMessage({
-                    message: data.msg.toString(),
-                    type: 'error',
-                })
+                ElMessage.error(data.msg)
             }
             getUser()
         })
     }
 
     return {
+        userBindName,
         isLogin,
         login_loading,
         userInfo,

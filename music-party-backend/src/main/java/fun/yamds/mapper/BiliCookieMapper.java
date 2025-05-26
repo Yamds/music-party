@@ -5,5 +5,5 @@ import fun.yamds.pojo.BiliCookiePojo;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface BiliMapper extends BaseMapper<BiliCookiePojo> {
+public interface BiliCookieMapper extends BaseMapper<BiliCookiePojo> {
 }

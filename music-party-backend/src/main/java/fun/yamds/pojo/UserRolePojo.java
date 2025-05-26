@@ -3,6 +3,7 @@ package fun.yamds.pojo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("user_role")
 public class UserRolePojo {
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @TableField("user_id")
     private Long userId;  // 用户id
 

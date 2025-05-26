@@ -1,8 +1,8 @@
 export interface BiliReturnInter {
-    code?: Number,
+    code?: number,
     message?: string,
-    ttl?: Number,
-    data?: Object
+    ttl?: number,
+    data?: object
 }
 
 export interface BiliBackstageReturnInter {
@@ -20,14 +20,14 @@ export interface BiliQRcodeReturnInter {
 export interface BiliQRcodeLoginReturnInter {
     url?: string,
     refresh_token?: string,
-    timestamp?: number,
+    timestamp?: string,
     code?: number,
     message?: string
 }
 
 export interface BiliSearchTypeUserReturnInter {
     result?: {
-        mid: number,
+        mid: string,
         uname: string,
         upic: string,
     }[]
