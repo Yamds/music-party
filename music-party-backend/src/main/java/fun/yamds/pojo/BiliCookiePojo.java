@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @TableName("bili_config")
 public class BiliPojo {
 
-    @TableId("fixed_id")
-    private int id;
+    @TableId("cookie_name")
+    private String cookieName;
 
-    @TableField("bili_SESSDATA")
-    private String sessdata;
-    // private String Cookie;
+    @TableField("cookie_context")
+    private String cookieContext;
+
 }
