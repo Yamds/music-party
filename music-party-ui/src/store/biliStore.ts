@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import type { BiliBackstageReturnInter, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter } from '@/types/bilibili';
-import { httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
+import type { BiliBackstageReturnInter, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter, BiliSearchTypeUserReturnInter } from '@/types/bilibili';
+import { httpBindnameSearch, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
 
 
 export const useBiliStore = defineStore('bili', () => {
@@ -10,29 +10,21 @@ export const useBiliStore = defineStore('bili', () => {
     let sessdata = ref("")
     let biliQrCode = ref<BiliQRcodeReturnInter>({
         qrcode_key: "",
-        qrcode_url: "",
+        url: "",
     })
+    let bindnameList = ref<BiliSearchTypeUserReturnInter>();
     let login_status = ref('')
 
     const saveSessdata = async (sessdata: string) => {
         if (sessdata == "") {
-            ElMessage({
-                message: "请输入数据再提交~",
-                type: 'warning',
-            })
+            ElMessage.warning("请输入数据再提交~")
         } else {
             await httpSaveSessdata(sessdata).then(data => {
                 if (data.success) {
                     getSessdata()
-                    ElMessage({
-                        message: data.msg.toString(),
-                        type: 'success',
-                    })
+                    ElMessage.success(data.msg)
                 } else {
-                    ElMessage({
-                        message: data.msg.toString(),
-                        type: 'error',
-                    })
+                    ElMessage.error(data.msg)
                 }
             })
         }
@@ -43,12 +35,9 @@ export const useBiliStore = defineStore('bili', () => {
         await httpGetSessdata().then(data => {
             if (data.success) {
                 const temp = data.data as BiliBackstageReturnInter
-                sessdata.value = temp.bili_config?.sessdata as string
+                sessdata.value = temp.bili_config?.cookieContext as string
             } else {
-                ElMessage({
-                    message: data.msg.toString(),
-                    type: 'error',
-                })
+                ElMessage.error(data.msg)
             }
         })
     }
@@ -70,8 +59,8 @@ export const useBiliStore = defineStore('bili', () => {
                 }
 
                 const qrcode_data = response.data as BiliQRcodeLoginReturnInter;
-                const code = Number(qrcode_data.data?.code) ?? -1;
-                const msg = qrcode_data.data?.message || '未知状态';
+                const code = Number(qrcode_data.code) ?? -1;
+                const msg = qrcode_data.message || '未知状态';
 
                 switch (code) {
                     case 86101: // 未扫码
@@ -83,12 +72,12 @@ export const useBiliStore = defineStore('bili', () => {
                     case 0:     // 登录成功
                         login_status.value = msg;
                         ElMessage.success("登录成功，正在获取SESSDATA！");
-                        biliQrCode.value = { qrcode_key: "", qrcode_url: "" };
+                        biliQrCode.value = { qrcode_key: "", url: "" };
                         clearInterval(pollInterval); // 停止轮询
                         isPolling.value = false
 
                         // 获取cookie
-                        const url = qrcode_data.data?.url || "获取失败"
+                        const url = qrcode_data.url || "获取失败"
                         const queryString = url.split('?')[1]; // 获取查询的参数部分
                         const param_list = queryString.split('&');
                         for (const param of param_list) {
@@ -103,13 +92,13 @@ export const useBiliStore = defineStore('bili', () => {
                     case 86038: // 二维码过期
                         login_status.value = msg;
                         ElMessage.error(`${msg}，请重新获取二维码！`);
-                        biliQrCode.value = { qrcode_key: "", qrcode_url: "" };
+                        biliQrCode.value = { qrcode_key: "", url: "" };
                         clearInterval(pollInterval); // 停止轮询
                         isPolling.value = false
                         return;
                     default:
                         console.warn('未知状态码:', code);
-                        biliQrCode.value = { qrcode_key: "", qrcode_url: "" };
+                        biliQrCode.value = { qrcode_key: "", url: "" };
                         isPolling.value = false
                         clearInterval(pollInterval); // 停止轮询
                         return
@@ -131,13 +120,25 @@ export const useBiliStore = defineStore('bili', () => {
         }, 180 * 1000); // 180秒超时
     };
 
+    const bindnameSearch = async (bind_name: string) => {
+        await httpBindnameSearch(bind_name).then(data => {
+            if (data.success) {
+                bindnameList.value = data.data
+                console.log(bindnameList.value)
+                ElMessage.success("成功获取用户列表")
+            }
+        })
+    }
+
     return {
         biliQrCode,
         sessdata,
         login_status,
         isPolling,
+        bindnameList,
         saveSessdata,
         getSessdata,
         getQrCode,
+        bindnameSearch,
     }
 })

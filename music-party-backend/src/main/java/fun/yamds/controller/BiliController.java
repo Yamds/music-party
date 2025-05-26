@@ -1,7 +1,7 @@
 package fun.yamds.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import fun.yamds.pojo.BiliPojo;
+import fun.yamds.pojo.BiliCookiePojo;
 import fun.yamds.pojo.Result;
 import fun.yamds.service.BiliService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +15,34 @@ public class BiliController {
     BiliService biliService;
 
     @SaCheckLogin
-    @PostMapping("/saveData")
-    public Result saveData(@RequestBody BiliPojo bili) {
-        return biliService.saveData(bili);
+    @PostMapping("/cookie")
+    public Result saveData(@RequestBody BiliCookiePojo bili) {
+        return biliService.saveCookie(bili);
     }
 
     @SaCheckLogin
-    @GetMapping("/getSessdata")
+    @GetMapping("/sessdata")
     public Result getSessdata() {
-        return biliService.getData();
+        BiliCookiePojo bili = new BiliCookiePojo();
+        bili.setCookieName("SESSDATA");
+        return biliService.getCookie(bili);
     }
 
     @SaCheckLogin
-    @GetMapping("/getQrCode")
+    @GetMapping("/qrcode")
     public Result getQrCode() {
         return biliService.getQrCode();
     }
 
     @SaCheckLogin
-    @GetMapping("/qrCodeLogin/{qrcode_key}")
+    @GetMapping("/qrcodeLogin/{qrcode_key}")
     public Result qrCodeLogin(@PathVariable String qrcode_key) {
         return biliService.qrCodeLogin(qrcode_key);
+    }
+
+    @SaCheckLogin
+    @GetMapping("/bindnameSearch/{bindname}")
+    public Result bindnameSearch(@PathVariable String bindname) {
+        return biliService.bindnameSearch(bindname);
     }
 }

@@ -48,7 +48,7 @@ export const usePermissionStore = defineStore('permission', () => {
 
     // 路由权限过滤
     // 逻辑判断基本与上方菜单一致
-    const hasRoutePermission = async (route_permission: String[]): Promise<boolean> => {
+    const hasRoutePermission = async (route_permission: string[]): Promise<boolean> => {
         if (route_permission.length === 0) return true // 没设权限的默认可见
         await store.getUser()
         return route_permission.some(p => permission_list.value.includes(p))

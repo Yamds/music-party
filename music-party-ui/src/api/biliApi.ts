@@ -38,13 +38,16 @@ async function request(method: 'get' | 'post' | 'put' | 'delete', url: string, d
 
 // 前后端交互
 export const httpSaveSessdata = (sessdata: string) =>
-    request('post', '/bili/saveData', { sessdata });
+    request('post', '/bili/cookie', { cookieName: "SESSDATA", cookieContext: sessdata });
 
 export const httpGetSessdata = () =>
-    request('get', '/bili/getSessdata');
+    request('get', '/bili/sessdata');
 
 export const httpGetQrCode = () =>
-    request('get', '/bili/getQrCode');
+    request('get', '/bili/qrcode');
 
 export const httpQrCodeLogin = (qrcode_key: string) =>
-    request('get', `/bili/qrCodeLogin/${qrcode_key}`);
+    request('get', `/bili/qrcodeLogin/${qrcode_key}`);
+
+export const httpBindnameSearch = (bindname: string) =>
+    request('get', `/bili/bindnameSearch/${bindname}`);

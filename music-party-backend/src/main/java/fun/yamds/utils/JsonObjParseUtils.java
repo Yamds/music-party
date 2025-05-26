@@ -12,7 +12,7 @@ import java.util.*;
 // 再将字符串通过拿到的字段，转换成你想要的对象
 // 字符串中多出的内容会被忽略 少的也忽略
 
-public class AutoMapper {
+public class JsonObjParseUtils {
 
     /**
      * 自定义泛型类型引用类（类似Spring的ParameterizedTypeReference）

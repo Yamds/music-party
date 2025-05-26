@@ -10,19 +10,37 @@
                 <span>尚未绑定</span>
             </el-descriptions-item>
         </el-descriptions>
-        <el-input v-model="bind_name" style="width: 240px" placeholder="请输入b站用户名: 可反复绑定哦~" />
+        <div class="username-search">
+            <el-input v-model="bind_name" style="width: 240px" placeholder="请输入b站用户名: 可反复绑定哦~" />
+            <el-button type="primary" @click="store.bindnameSearch(bind_name)">搜索</el-button>
+            <div>
+                <ul>
+                    <li v-for="item in store.bindnameList?.result">
+                        {{ item }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script setup lang="ts">
 import DocBlock from '@/components/DocBlock.vue';
+import { useBiliStore } from '@/store/biliStore';
 import { ref } from 'vue';
 
 const bind_name = ref('')
+
+const store = useBiliStore()
 </script>
 
 <style scoped>
 .el-descriptions * {
     background-color: var(--el-bg-color);
+}
+
+.username-search>* {
+    margin-right: 1rem;
 }
 </style>

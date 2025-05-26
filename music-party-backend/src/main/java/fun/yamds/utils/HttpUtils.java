@@ -7,26 +7,26 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @Component
-public class HttpUtil {
+public class HttpUtils {
     private final RestTemplate restTemplate;
 
-    public HttpUtil(RestTemplate restTemplate) {
+    public HttpUtils(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public <T> T get(String url, AutoMapper.ParameterizedTypeReference<? extends T> type) {
+    public <T> T get(String url, JsonObjParseUtils.ParameterizedTypeReference<? extends T> type) {
         try {
             String resp = restTemplate.getForObject(url, String.class);
             if (resp == null) {
                 throw new RuntimeException("B站接口返回空响应");
             }
-            return AutoMapper.parse(resp, type);
+            return JsonObjParseUtils.parse(resp, type);
         } catch (Exception e) {
             throw new RuntimeException("请求失败", e);
         }
     }
 
-    public <T> T getWithHeaders(String url, AutoMapper.ParameterizedTypeReference<T> type, Map<String, String> customHeaders) {
+    public <T> T getWithHeaders(String url, JsonObjParseUtils.ParameterizedTypeReference<T> type, Map<String, String> customHeaders) {
         try {
             // 1. 构建请求头
             HttpHeaders headers = new HttpHeaders();
@@ -45,7 +45,7 @@ public class HttpUtil {
             );
 
             // 4. 解析响应
-            return AutoMapper.parse(response.getBody(), type);
+            return JsonObjParseUtils.parse(response.getBody(), type);
         } catch (Exception e) {
             throw new RuntimeException("请求失败", e);
         }

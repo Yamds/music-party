@@ -45,7 +45,7 @@ import { useBiliStore } from '@/store/biliStore';
 const store = useBiliStore();
 
 const sessdata = computed(() => store.sessdata)
-const qrCodeValue = computed(() => store.biliQrCode.qrcode_url)
+const qrCodeValue = computed(() => store.biliQrCode.url)
 const login_status = computed(() => store.login_status)
 const isPolling = computed(() => store.isPolling)
 const input_sessdata = ref("")

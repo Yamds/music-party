@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("bili_config")
-public class BiliPojo {
+public class BiliCookiePojo {
 
     @TableId("cookie_name")
     private String cookieName;
