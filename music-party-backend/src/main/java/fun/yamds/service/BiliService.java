@@ -28,7 +28,7 @@ public interface BiliService {
 
     public Result bindnameSearch(String bindname);
 
-    public Result getFolderList();
+    // public Result getFolderList();
 
-    public Result getFolderInfo();
+    // public Result getFolderInfo();
 }

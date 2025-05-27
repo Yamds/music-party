@@ -122,7 +122,7 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         Result result3 = getPermissionById(user);
         Result result4 = getBindBiliName(user);
 
-        if(result1.getData() == null || result2.getData() == null || result3.getData() == null || result4.getData() == null) {
+        if(result1.getData() == null || result2.getData() == null || result3.getData() == null) {
             return Result.error().msg("获取结果为空");
         }
 
@@ -133,8 +133,6 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
             return result2;
         if(!result3.getSuccess())
             return result3;
-        if(!result4.getSuccess())
-            return result4;
 
         // 返回信息前 清除密码
         Object obj = result1.getData().get("user");
@@ -148,7 +146,10 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         map.put("user", user2);
         map.put("role_name", result2.getData().get("role_name"));
         map.put("permission_name", result3.getData().get("permission_name"));
-        map.put("bili_name", result4.getData().get("bili_name"));
+        if(result4.getData() != null)
+            map.put("bili_name", result4.getData().get("bili_name"));
+        else
+            map.put("bili_name", "");
         return Result.ok().msg("成功获取用户信息、角色、权限和绑定用户名").data(map);
     }
 
@@ -169,8 +170,6 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         user.setCreateTime(timestamp);
         user.setUpdateTime(timestamp);
 
-
-
         if(userMapper.insert(user) != 0) {
             // 获取id，插入角色关系(3L 是 user)
             QueryWrapper<UserPojo> queryWrapper = new QueryWrapper<>();
@@ -183,10 +182,7 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
             else
                 return Result.error().msg("注册失败: 插入用户角色关系失败！");
         }
-
-
         return Result.error().msg("注册失败: 没有成功插入数据");
-
     }
 
     @Override

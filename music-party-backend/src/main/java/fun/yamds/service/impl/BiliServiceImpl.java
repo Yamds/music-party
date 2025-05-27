@@ -97,7 +97,7 @@ public class BiliServiceImpl implements BiliService {
             String request_url = "https://api.bilibili.com/x/web-frontend/getbuvid";
             BiliApiResponsePojo<BiliApiResponsePojo.Buvid3> response = httpUtils.get(
                     request_url,
-                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.buvid3>>() {}
+                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.Buvid3>>() {}
             );
             if(response != null) {
                 return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取buvid3");
@@ -155,7 +155,7 @@ public class BiliServiceImpl implements BiliService {
             customHeaders.put("Cookie", cookies);
             BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser> response = httpUtils.getWithHeaders(
                     request_url,
-                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.searchTypeUser>>() {},
+                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser>>() {},
                     customHeaders
             );
             if(response != null) {
