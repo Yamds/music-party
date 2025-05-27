@@ -14,12 +14,12 @@ public class BiliApiResponsePojo<T> {
 
     // 下面的接口统统指的是data里的内容
     @Data
-    public static class qrcodeGenerate {
+    public static class QrcodeGenerate {
         private String url;
         private String qrcode_key;
     }
     @Data
-    public static class qrcodeSuccess {
+    public static class QrcodeSuccess {
         private String url;
         private String refresh_token;
         private String timestamp;
@@ -28,19 +28,76 @@ public class BiliApiResponsePojo<T> {
     }
 
     @Data
-    public static class buvid3 {
+    public static class Buvid3 {
         private String buvid;
     }
 
     @Data
-    public static class searchTypeUser {
-        private List<biliUser> result;
+    public static class SearchTypeUser {
+        private List<BiliUser> result;
 
         @Data
-        public static class biliUser {
+        public static class BiliUser {
             private long mid;
             private String uname;
             private String upic;
+        }
+    }
+
+    @Data
+    public static class FolderList {
+        private int count;
+        private List<fList> list;
+
+        @Data
+        public static class fList {
+            private long id;
+            private long fid;
+            private long mid;
+            private String title;
+            private int media_count;
+        }
+    }
+
+    @Data
+    public static class FolderInfo {
+        private Info info;
+        private List<Medias> medias;
+
+        @Data
+        public static class Info {
+            private long id;
+            private long fid;
+            private long mid;
+            private String title;
+            private String cover;
+            private Upper upper;
+
+            @Data
+            public static class Upper{
+                private long mid;
+                private String name;
+            }
+        }
+
+        @Data
+        public static class Medias {
+            private long id;
+            private String bvid;
+            private long type;
+            private String title;
+            private String cover;
+            private String intro;
+            private long page;
+            private long duration;
+            private Upper upper;
+
+            @Data
+            public static class Upper {
+                private long mid;
+                private String name;
+                private String face;
+            }
         }
     }
 

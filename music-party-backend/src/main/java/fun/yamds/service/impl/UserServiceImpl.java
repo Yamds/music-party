@@ -106,12 +106,23 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
     }
 
     @Override
+    public Result getBindBiliName(UserPojo user) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("bili_name", userMapper.getBindBiliNameByUserId(user.getId()));
+        if(map.get("bili_name") != null)
+            return Result.ok().msg("bili用户名获取成功").data(map);
+        else
+            return Result.error().msg("bili用户名未获取或不存在");
+    }
+
+    @Override
     public Result getUserInfoById(UserPojo user) {
         Result result1 = getUser(user);
         Result result2 = getRoleById(user);
         Result result3 = getPermissionById(user);
+        Result result4 = getBindBiliName(user);
 
-        if(result1.getData() == null || result2.getData() == null || result3.getData() == null) {
+        if(result1.getData() == null || result2.getData() == null || result3.getData() == null || result4.getData() == null) {
             return Result.error().msg("获取结果为空");
         }
 
@@ -122,6 +133,8 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
             return result2;
         if(!result3.getSuccess())
             return result3;
+        if(!result4.getSuccess())
+            return result4;
 
         // 返回信息前 清除密码
         Object obj = result1.getData().get("user");
@@ -135,7 +148,8 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         map.put("user", user2);
         map.put("role_name", result2.getData().get("role_name"));
         map.put("permission_name", result3.getData().get("permission_name"));
-        return Result.ok().msg("成功获取用户信息、角色和权限").data(map);
+        map.put("bili_name", result4.getData().get("bili_name"));
+        return Result.ok().msg("成功获取用户信息、角色、权限和绑定用户名").data(map);
     }
 
     // service

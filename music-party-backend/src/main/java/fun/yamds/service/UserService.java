@@ -17,6 +17,8 @@ public interface UserService extends IService<UserPojo> {
 
     public Result getRoleById(UserPojo user);
 
+    public Result getBindBiliName(UserPojo user);
+
     public Result getUserInfoById(UserPojo user);
 
     public Result register(UserPojo user);

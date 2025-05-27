@@ -109,6 +109,7 @@ export const useUserStore = defineStore('user', () => {
                 userInfo.bind.netease = user_data.user.neteaseId
                 userInfo.role = user_data.role_name
                 userInfo.permission = user_data.permission_name
+                userBindName.biliName = user_data.bili_name
             } else {
                 const temp = newUserInfo()
                 userInfo.id = temp.user.id
@@ -117,6 +118,7 @@ export const useUserStore = defineStore('user', () => {
                 userInfo.bind.netease = temp.user.neteaseId
                 userInfo.role = temp.role_name
                 userInfo.permission = temp.permission_name
+                userBindName.biliName = temp.bili_name
             }
         }).finally(() => {
             setIsLogin()

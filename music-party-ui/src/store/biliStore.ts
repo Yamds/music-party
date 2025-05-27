@@ -47,7 +47,6 @@ export const useBiliStore = defineStore('bili', () => {
         const userId = useUserStore().userInfo.id
         await httpBindBiliUser(userId, biliId, biliName, biliPic).then(data => {
             if (data.success) {
-                useUserStore().userBindName.biliName = biliName
                 useUserStore().getUser()
                 bindnameList.value = {}
                 ElMessage.success("bili绑定成功！")

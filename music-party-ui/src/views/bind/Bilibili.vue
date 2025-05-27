@@ -23,12 +23,18 @@
                 </el-tag>
             </div>
         </div>
-
+        <el-divider content-position="left">绑定用户收藏夹</el-divider>
+        <div class="folder">
+            <el-collapse accordion expand-icon-position="left">
+                <el-collapse-item title="qwq">awa</el-collapse-item>
+            </el-collapse>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import DocBlock from '@/components/DocBlock.vue';
+// import { type CollapseIconPositionType } from 'element-plus'
 import { useBiliStore } from '@/store/biliStore';
 import { useUserStore } from '@/store/userStore';
 import { computed, ref } from 'vue';
@@ -54,5 +60,6 @@ const userBindName = computed(() => userStore.userBindName)
 
 .username-list .el-tag {
     margin: 0.25rem;
+    cursor: pointer;
 }
 </style>

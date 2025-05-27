@@ -95,7 +95,7 @@ public class BiliServiceImpl implements BiliService {
     public Result getbuvid() {
         try {
             String request_url = "https://api.bilibili.com/x/web-frontend/getbuvid";
-            BiliApiResponsePojo<BiliApiResponsePojo.buvid3> response = httpUtils.get(
+            BiliApiResponsePojo<BiliApiResponsePojo.Buvid3> response = httpUtils.get(
                     request_url,
                     new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.buvid3>>() {}
             );
@@ -113,9 +113,9 @@ public class BiliServiceImpl implements BiliService {
         try {
             // 目标API地址
             String request_url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate";
-            BiliApiResponsePojo<BiliApiResponsePojo.qrcodeGenerate> response = httpUtils.get(
+            BiliApiResponsePojo<BiliApiResponsePojo.QrcodeGenerate> response = httpUtils.get(
                     request_url,
-                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.qrcodeGenerate>>() {}
+                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.QrcodeGenerate>>() {}
             );
             if(response != null) {
                 return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取qrcode");
@@ -132,9 +132,9 @@ public class BiliServiceImpl implements BiliService {
             // 目标API地址
             // System.out.println(qrcode_key);
             String request_url = "https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key=" + qrcode_key;
-            BiliApiResponsePojo<BiliApiResponsePojo.qrcodeSuccess> response = httpUtils.get(
+            BiliApiResponsePojo<BiliApiResponsePojo.QrcodeSuccess> response = httpUtils.get(
                     request_url,
-                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.qrcodeSuccess>>() {}
+                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.QrcodeSuccess>>() {}
                     );
             if(response != null) {
                 return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取登录信息");
@@ -153,7 +153,7 @@ public class BiliServiceImpl implements BiliService {
             String request_url = "https://api.bilibili.com/x/web-interface/wbi/search/type?search_type=bili_user&keyword=" + bindname;
             Map<String, String> customHeaders = new HashMap<>();
             customHeaders.put("Cookie", cookies);
-            BiliApiResponsePojo<BiliApiResponsePojo.searchTypeUser> response = httpUtils.getWithHeaders(
+            BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser> response = httpUtils.getWithHeaders(
                     request_url,
                     new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.searchTypeUser>>() {},
                     customHeaders
@@ -165,4 +165,6 @@ public class BiliServiceImpl implements BiliService {
         }
         return Result.error().msg("cookie为空");
     }
+
+
 }

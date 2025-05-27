@@ -20,6 +20,7 @@ export interface returnUserInfoInter {
     }
     role_name: string[],
     permission_name: string[],
+    bili_name: string,
 }
 
 
@@ -35,5 +36,6 @@ export function newUserInfo(): returnUserInfoInter {
         },
         role_name: [],
         permission_name: [],
+        bili_name: "",
     };
 }

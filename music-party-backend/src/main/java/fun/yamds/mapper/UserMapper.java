@@ -41,6 +41,13 @@ public interface UserMapper extends BaseMapper<UserPojo> {
     @Select("SELECT username FROM user WHERE username = #{username}")
     String usernameExist(String username);  // 判断用户名是否存在    如果存在，返回名字 不存在返回null
 
+    // 根据user id拿到绑定的bili用户名
+    @Select("SELECT b.bili_name " +
+            "FROM user u " +
+            "JOIN biliuser b ON u.bili_id = b.bili_id " +
+            "WHERE u.id = #{userID} ")
+    String getBindBiliNameByUserId(Long userId);
+
     @Update({
             "<script>",
             "UPDATE user",

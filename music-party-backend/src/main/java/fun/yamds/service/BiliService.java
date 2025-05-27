@@ -27,4 +27,8 @@ public interface BiliService {
     public Result qrCodeLogin(String qrcode_key);
 
     public Result bindnameSearch(String bindname);
+
+    public Result getFolderList();
+
+    public Result getFolderInfo();
 }
