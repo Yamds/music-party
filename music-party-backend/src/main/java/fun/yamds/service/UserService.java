@@ -27,4 +27,6 @@ public interface UserService extends IService<UserPojo> {
 
     public Result changeUserInfo(UserPojo user);
 
+    public Result isBindBili(UserPojo user);
+
 }

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import type { BiliBackstageReturnInter, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter, BiliSearchTypeUserReturnInter } from '@/types/bilibili';
-import { httpBindBiliUser, httpBindnameSearch, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
+import type { BiliBackstageReturnInter, BiliFolderInfoInter, BiliFolerListInter, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter, BiliSearchTypeUserReturnInter } from '@/types/bilibili';
+import { httpBindBiliUser, httpBindnameSearch, httpGetFolderInfo, httpGetFolderList, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
 import { useUserStore } from './userStore';
 
 
@@ -13,8 +13,12 @@ export const useBiliStore = defineStore('bili', () => {
         qrcode_key: "",
         url: "",
     })
-    let bindnameList = ref<BiliSearchTypeUserReturnInter>();
+    let bindnameList = ref<BiliSearchTypeUserReturnInter>()
     let login_status = ref('')
+    let userFolderList = ref({
+        fList: {} as BiliFolerListInter,
+        fInfo: [] as BiliFolderInfoInter[],
+    })
 
     const saveSessdata = async (sessdata: string) => {
         if (sessdata == "") {
@@ -36,7 +40,7 @@ export const useBiliStore = defineStore('bili', () => {
         await httpGetSessdata().then(data => {
             if (data.success) {
                 const temp = data.data as BiliBackstageReturnInter
-                sessdata.value = temp.bili_config?.cookieContext as string
+                sessdata.value = temp.bili_cookie?.cookieContext as string
             } else {
                 ElMessage.error(data.msg)
             }
@@ -138,10 +142,57 @@ export const useBiliStore = defineStore('bili', () => {
         await httpBindnameSearch(bind_name).then(data => {
             if (data.success) {
                 bindnameList.value = data.data
-                console.log(bindnameList.value)
                 ElMessage.success("成功获取用户列表")
             }
         })
+    }
+
+    const getFolderList = async (user_id: string) => {
+        userFolderList.value = {
+            fList: {} as BiliFolerListInter,
+            fInfo: [] as BiliFolderInfoInter[],
+        }
+        await httpGetFolderList(user_id).then(data => {
+            if (data.success) {
+                userFolderList.value.fList = data.data as BiliFolerListInter
+                for (let item of userFolderList.value.fList.list) {
+                    let temp = { info: { id:"" } } as BiliFolderInfoInter
+                    temp.info.id = item.id
+                    temp.has_more = false
+                    temp.info.title = item.title
+                    temp.medias = []
+                    temp.page = 1
+                    userFolderList.value.fInfo.push(temp)
+                }
+                ElMessage.success("成功获取收藏夹")
+            }
+        })
+    }
+
+    const getFolderInfo = async (name: string, media_id: string, pn: number) => {
+        console.log("正在请求" + name + " :" + pn)
+        await httpGetFolderInfo(media_id, pn).then(data => {
+            if (data.success) {
+                console.log(data)
+                const temp = data.data as BiliFolderInfoInter
+                for (const item of userFolderList.value.fInfo) {
+                    if (item?.info.id == temp.info.id) {
+                        item.info = temp.info
+                        item.page += 1
+                        item.has_more = temp.has_more
+                        item.medias.push(...temp.medias)
+                        return
+                    }
+                }
+                // userFolderList.value.fInfo.push(temp)
+                ElMessage.success("成功获取收藏夹详细")
+            }
+        })
+
+    }
+
+    const test = (media_id: string, pn: number) => {
+        console.log(media_id,"---", pn)
     }
 
     return {
@@ -150,10 +201,14 @@ export const useBiliStore = defineStore('bili', () => {
         login_status,
         isPolling,
         bindnameList,
+        userFolderList,
         saveSessdata,
         getSessdata,
         getQrCode,
         bindnameSearch,
         bindBiliuser,
+        getFolderList,
+        getFolderInfo,
+        test,
     }
 })

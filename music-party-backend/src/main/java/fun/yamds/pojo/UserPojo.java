@@ -54,4 +54,8 @@ public class UserPojo {
     @TableLogic
     private Boolean deleteFlag; // 逻辑删除标识(0正常 1删除)
 
+    public UserPojo(Long id) {
+        this.id = id;
+    }
+
 }

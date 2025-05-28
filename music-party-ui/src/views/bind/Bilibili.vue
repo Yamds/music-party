@@ -24,9 +24,22 @@
             </div>
         </div>
         <el-divider content-position="left">绑定用户收藏夹</el-divider>
+        <el-button @click="biliStore.getFolderList(userStore.userInfo.id)">getFolderList</el-button>
         <div class="folder">
-            <el-collapse accordion expand-icon-position="left">
-                <el-collapse-item title="qwq">awa</el-collapse-item>
+            <el-collapse accordion expand-icon-position="left" v-model="active_page">
+                <el-collapse-item v-for="item in biliStore.userFolderList?.fInfo" :title="item.info.title" :name="item.info.title" @Click="">
+                    <ul
+                    infinite-scroll-immediate="true"
+                    v-infinite-scroll="() => biliStore.getFolderInfo(item.info.title, item.info.id, item.page)"
+                    infinite-scroll-distance="0"
+                    class="infinite-list">
+                        <li v-for="i in item.medias" :key="i.id" class="infinite-list-item">{{ i.title }}</li>
+                        <!-- <li>
+                            <el-skeleton :rows="8" v-if="item.medias.length ==0" />
+                        </li> -->
+                        <li v-if="item.has_more">没有了QAQ</li>
+                    </ul>
+                </el-collapse-item>
             </el-collapse>
         </div>
     </div>
@@ -34,7 +47,6 @@
 
 <script setup lang="ts">
 import DocBlock from '@/components/DocBlock.vue';
-// import { type CollapseIconPositionType } from 'element-plus'
 import { useBiliStore } from '@/store/biliStore';
 import { useUserStore } from '@/store/userStore';
 import { computed, ref } from 'vue';
@@ -46,6 +58,8 @@ const bind_name = ref('')
 
 const userInfo = computed(() => userStore.userInfo)
 const userBindName = computed(() => userStore.userBindName)
+
+const active_page = ref("")
 
 </script>
 
@@ -61,5 +75,12 @@ const userBindName = computed(() => userStore.userBindName)
 .username-list .el-tag {
     margin: 0.25rem;
     cursor: pointer;
+}
+
+.infinite-list {
+    height: 300px;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
 }
 </style>

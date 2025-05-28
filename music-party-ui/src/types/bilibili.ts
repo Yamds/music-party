@@ -6,7 +6,7 @@ export interface BiliReturnInter {
 }
 
 export interface BiliBackstageReturnInter {
-    bili_config?: {
+    bili_cookie?: {
         cookieName?: string,
         cookieContext?: string,
     }
@@ -30,5 +30,47 @@ export interface BiliSearchTypeUserReturnInter {
         mid: string,
         uname: string,
         upic: string,
+    }[]
+}
+
+export interface BiliFolerListInter {
+    count: number,
+    list: {
+        id: string,
+        fid: string,
+        mid: string,
+        title: string,
+        media_count: number,
+    }[]
+}
+
+export interface BiliFolderInfoInter {
+    has_more: boolean,
+    page: number,
+    info: {
+        id: string,
+        fid: string,
+        mid: string,
+        title: string,
+        cover: string,
+        upper: {
+            mid: string,
+            name: string,
+        }
+    },
+    medias: {
+        id: string,
+        bvid: string,
+        type: number,
+        title: string,
+        cover: string,
+        intro: string,
+        page: number,
+        duration: number,
+        upper: {
+            mid: string,
+            name: string,
+            face: string,
+        }
     }[]
 }

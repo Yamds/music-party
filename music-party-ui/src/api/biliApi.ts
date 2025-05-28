@@ -54,3 +54,9 @@ export const httpQrCodeLogin = (qrcode_key: string) =>
 
 export const httpBindnameSearch = (bindname: string) =>
     request('get', `/bili/bindnameSearch/${bindname}`);
+
+export const httpGetFolderList = (user_id: string) =>
+    request('get', `/bili/folderList/${user_id}`);
+
+export const httpGetFolderInfo = (media_id: string, pn: number) =>
+    request('get', `/bili/folderInfo/${media_id}/${pn}`);

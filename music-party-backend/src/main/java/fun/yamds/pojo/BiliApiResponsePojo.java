@@ -63,6 +63,7 @@ public class BiliApiResponsePojo<T> {
     public static class FolderInfo {
         private Info info;
         private List<Medias> medias;
+        private Boolean has_more;
 
         @Data
         public static class Info {

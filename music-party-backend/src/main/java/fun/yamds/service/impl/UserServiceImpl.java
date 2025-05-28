@@ -210,4 +210,18 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
             return Result.error().msg("修改失败！");
         }
     }
+
+    @Override
+    public Result isBindBili(UserPojo user) {
+        QueryWrapper<UserPojo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("bili_id")
+                .eq("id", user.getId());
+        UserPojo userPojo = userMapper.selectOne(queryWrapper);
+        if(userPojo == null)
+            return Result.error().msg("未能获取用户关联bili id");
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("bili_id", userPojo.getBiliId());
+        return Result.ok().msg("成功获取用户关联BILI id").data(map);
+    }
 }

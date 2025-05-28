@@ -57,7 +57,7 @@ public class BiliServiceImpl implements BiliService {
         if(cookiePojo != null) {
             bili.setCookieContext(cookiePojo.getCookieContext());
             HashMap<String, Object> map = new HashMap<>();
-            map.put("bili_config", bili);
+            map.put("bili_cookie", bili);
             return Result.ok().msg(bili.getCookieName() + "获取成功！").data(map);
         } else {
             return Result.error().msg("不存在该name的Cookie");
@@ -72,7 +72,7 @@ public class BiliServiceImpl implements BiliService {
         for(BiliCookiePojo biliCookiePojo : biliCookiePojos)
             cookie.append(biliCookiePojo.getCookieName()).append("=").append(biliCookiePojo.getCookieContext()).append("; ");
         if(!cookie.isEmpty()) {
-            map.put("cookie", cookie.toString());
+            map.put("bili_cookie", cookie.toString());
             return Result.ok().data(map).msg("成功获取Cookie");
         }
         return Result.error().msg("未能获取Cookie");
@@ -147,24 +147,73 @@ public class BiliServiceImpl implements BiliService {
 
     @Override
     public Result bindnameSearch(String bindname) {
-        // 提取Map中的Cookie字符串
-        String cookies = (String) getAllCookie().getData().get("cookie");
-        if(cookies != null && !cookies.isEmpty()) {
-            String request_url = "https://api.bilibili.com/x/web-interface/wbi/search/type?search_type=bili_user&keyword=" + bindname;
-            Map<String, String> customHeaders = new HashMap<>();
-            customHeaders.put("Cookie", cookies);
-            BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser> response = httpUtils.getWithHeaders(
-                    request_url,
-                    new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser>>() {},
-                    customHeaders
-            );
-            if(response != null) {
-                return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取用户列表");
+        try {
+            // 提取Map中的Cookie字符串
+            String cookies = (String) getAllCookie().getData().get("bili_cookie");
+            if(cookies != null && !cookies.isEmpty()) {
+                String request_url = "https://api.bilibili.com/x/web-interface/wbi/search/type?search_type=bili_user&keyword=" + bindname;
+                Map<String, String> customHeaders = new HashMap<>();
+                customHeaders.put("Cookie", cookies);
+                BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser> response = httpUtils.getWithHeaders(
+                        request_url,
+                        new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.SearchTypeUser>>() {},
+                        customHeaders
+                );
+                if(response != null) {
+                    return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取用户列表");
+                }
+                return Result.error().msg("响应内容不存在");
             }
-            return Result.error().msg("响应内容不存在");
+            return Result.error().msg("cookie为空");
+        } catch (RestClientException e) {
+            return Result.error().msg("响应失败, " + e.getMessage());
         }
-        return Result.error().msg("cookie为空");
     }
 
+    @Override
+    public Result getFolderList(String up_mid) {
+        try {
+            String request_url = "https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=" + up_mid;
+            // 提取Map中的Cookie字符串
+            String cookies = (String) getAllCookie().getData().get("bili_cookie");
+            if(cookies != null && !cookies.isEmpty()) {
+                Map<String, String> customHeaders = new HashMap<>();
+                customHeaders.put("Cookie", cookies);
+                BiliApiResponsePojo<BiliApiResponsePojo.FolderList> response = httpUtils.getWithHeaders(
+                        request_url,
+                        new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.FolderList>>() {},
+                        customHeaders
+                );
+                if(response != null) 
+                    return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取收藏夹列表");
+                return Result.error().msg("响应内容不存在");
+            }
+        } catch (RestClientException e) {
+            return Result.error().msg("响应失败, " + e.getMessage());
+        }
+        return Result.error();
+    }
 
+    public Result getFolderInfo(String media_id, int pn) {
+        try {
+            String request_url = "https://api.bilibili.com/x/v3/fav/resource/list?type=0&ps=20&media_id=" + media_id + "&pn=" + pn ;
+            // 提取Map中的Cookie字符串
+            String cookies = (String) getAllCookie().getData().get("bili_cookie");
+            if(cookies != null && !cookies.isEmpty()) {
+                Map<String, String> customHeaders = new HashMap<>();
+                customHeaders.put("Cookie", cookies);
+                BiliApiResponsePojo<BiliApiResponsePojo.FolderInfo> response = httpUtils.getWithHeaders(
+                        request_url,
+                        new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.FolderInfo>>() {},
+                        customHeaders
+                );
+                if(response != null)
+                    return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取收藏夹详细信息");
+                return Result.error().msg("响应内容不存在");
+            }
+        }catch (RestClientException e) {
+            return Result.error().msg("响应失败, " + e.getMessage());
+        }
+        return Result.error();
+    }
 }
