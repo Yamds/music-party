@@ -20,6 +20,8 @@ export const useBiliStore = defineStore('bili', () => {
         fInfo: [] as BiliFolderInfoInter[],
     })
 
+    let isLoading = ref(false)
+
     const saveSessdata = async (sessdata: string) => {
         if (sessdata == "") {
             ElMessage.warning("请输入数据再提交~")
@@ -156,7 +158,7 @@ export const useBiliStore = defineStore('bili', () => {
             if (data.success) {
                 userFolderList.value.fList = data.data as BiliFolerListInter
                 for (let item of userFolderList.value.fList.list) {
-                    let temp = { info: { id:"" } } as BiliFolderInfoInter
+                    let temp = { info: { id: "" } } as BiliFolderInfoInter
                     temp.info.id = item.id
                     temp.has_more = false
                     temp.info.title = item.title
@@ -170,29 +172,36 @@ export const useBiliStore = defineStore('bili', () => {
     }
 
     const getFolderInfo = async (name: string, media_id: string, pn: number) => {
-        console.log("正在请求" + name + " :" + pn)
-        await httpGetFolderInfo(media_id, pn).then(data => {
-            if (data.success) {
-                console.log(data)
-                const temp = data.data as BiliFolderInfoInter
-                for (const item of userFolderList.value.fInfo) {
-                    if (item?.info.id == temp.info.id) {
-                        item.info = temp.info
-                        item.page += 1
-                        item.has_more = temp.has_more
-                        item.medias.push(...temp.medias)
-                        return
+        if (isLoading.value)
+            return
+        isLoading.value = true
+        setTimeout(async () => {
+            // console.log("正在请求" + name + " :" + pn)
+            await httpGetFolderInfo(media_id, pn).then(data => {
+                if (data.success) {
+                    // console.log(data)
+                    const temp = data.data as BiliFolderInfoInter
+                    for (const item of userFolderList.value.fInfo) {
+                        if (item?.info.id == temp.info.id) {
+                            item.info = temp.info
+                            item.page += 1
+                            item.has_more = temp.has_more
+                            item.medias.push(...temp.medias)
+                            return
+                        }
                     }
+                    // userFolderList.value.fInfo.push(temp)
+                    ElMessage.success("成功获取收藏夹详细")
                 }
-                // userFolderList.value.fInfo.push(temp)
-                ElMessage.success("成功获取收藏夹详细")
-            }
-        })
+            }).finally(() => {
+                isLoading.value = false
+            })
+        }, 100)
 
     }
 
     const test = (media_id: string, pn: number) => {
-        console.log(media_id,"---", pn)
+        console.log(media_id, "---", pn)
     }
 
     return {
@@ -202,6 +211,7 @@ export const useBiliStore = defineStore('bili', () => {
         isPolling,
         bindnameList,
         userFolderList,
+        isLoading,
         saveSessdata,
         getSessdata,
         getQrCode,
