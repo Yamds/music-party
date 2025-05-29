@@ -26,8 +26,8 @@ export const useUserStore = defineStore('user', () => {
     })
 
     const userBindName = reactive({
-        biliName: "",
-        neteaseName: "",
+        biliInfo: [] as string[],   // SELECT b.bili_id, b.bili_name, b.bili_pic
+        neteaseInfo: [] as string[],
     })
 
     const setIsLogin = async () => {
@@ -109,7 +109,7 @@ export const useUserStore = defineStore('user', () => {
                 userInfo.bind.netease = user_data.user.neteaseId
                 userInfo.role = user_data.role_name
                 userInfo.permission = user_data.permission_name
-                userBindName.biliName = user_data.bili_name
+                userBindName.biliInfo = user_data.bili_info
             } else {
                 const temp = newUserInfo()
                 userInfo.id = temp.user.id
@@ -118,7 +118,7 @@ export const useUserStore = defineStore('user', () => {
                 userInfo.bind.netease = temp.user.neteaseId
                 userInfo.role = temp.role_name
                 userInfo.permission = temp.permission_name
-                userBindName.biliName = temp.bili_name
+                userBindName.biliInfo = temp.bili_info
             }
         }).finally(() => {
             setIsLogin()

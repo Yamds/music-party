@@ -108,8 +108,8 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
     @Override
     public Result getBindBiliName(UserPojo user) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("bili_name", userMapper.getBindBiliNameByUserId(user.getId()));
-        if(map.get("bili_name") != null)
+        map.put("bili_info", userMapper.getBindBiliInfoByUserId(user.getId()));
+        if(map.get("bili_info") != null)
             return Result.ok().msg("bili用户名获取成功").data(map);
         else
             return Result.error().msg("bili用户名未获取或不存在");

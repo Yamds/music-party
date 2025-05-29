@@ -42,11 +42,11 @@ public interface UserMapper extends BaseMapper<UserPojo> {
     String usernameExist(String username);  // 判断用户名是否存在    如果存在，返回名字 不存在返回null
 
     // 根据user id拿到绑定的bili用户名
-    @Select("SELECT b.bili_name " +
+    @Select("SELECT b.bili_id, b.bili_name, b.bili_pic " +
             "FROM user u " +
             "JOIN biliuser b ON u.bili_id = b.bili_id " +
             "WHERE u.id = #{userID} ")
-    String getBindBiliNameByUserId(Long userId);
+    List<String> getBindBiliInfoByUserId(Long userId);
 
     @Update({
             "<script>",

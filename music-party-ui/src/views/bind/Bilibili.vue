@@ -3,10 +3,15 @@
         <DocBlock :type="'info'" title="哔哩哔哩" icon="fa-solid:user" context="绑定信息、点歌~" />
         <el-divider content-position="left">b站用户绑定</el-divider>
         <el-descriptions title="" :column=1>
+            <el-descriptions-item label="">
+                <span v-if="userInfo.bind.bilibili == null">获取失败</span>
+                <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
+                <span v-else="!userInfo.bind.bilibili"><img :src="userBindName.biliInfo[2]" alt=""></span>
+            </el-descriptions-item>
             <el-descriptions-item label="用户名">
                 <span v-if="userInfo.bind.bilibili == null">获取失败</span>
                 <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
-                <span v-else="!userInfo.bind.bilibili">{{ userBindName.biliName }}</span>
+                <span v-else="!userInfo.bind.bilibili">{{ userBindName.biliInfo[1] }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="bid">
                 <span v-if="userInfo.bind.bilibili == null">获取失败</span>
@@ -34,7 +39,24 @@
                         :infinite-scroll-disabled="!(item.page == 1 || (item.has_more && active_page == item.info.title))"
                         v-infinite-scroll="() => biliStore.getFolderInfo(item.info.title, item.info.id, item.page)"
                         infinite-scroll-distance="0">
-                        <li v-for="i in item.medias" :key="i.id" class="infinite-list-item">{{ i.title }}</li>
+                        <li v-for="i, index in item.medias" :key="i.id" class="infinite-list-item">
+                            <div class="video_list">
+                                <span>{{ index+1 }}.</span>
+                                <img class="big_img" style="height: 0" :src="i.cover" referrerPolicy="no-referrer" alt="">
+                                <img class="cover_img" :src="i.cover" referrerPolicy="no-referrer" alt="">
+                                <div class="video_info">
+                                    <span class="video_title">{{ i.title }}</span>
+                                    <div class="other_info">
+                                        <span class="video_upper">{{ i.upper.name }}</span>
+                                        <span class="video_duration">
+                                            {{ Math.floor(i.duration/3600)==0?"" : Math.floor(i.duration/3600).toString().padStart(2, "0") + ":"}}
+                                            {{ Math.floor(i.duration%3600/60).toString().padStart(2, "0") }}:
+                                            {{ (i.duration%60).toString().padStart(2, "0") }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                         <li :class="[!biliStore.isLoading && item.has_more ? 'noloading' : '', 'loading']"
                             v-if="item.has_more">
                             <el-skeleton :rows="1" />
@@ -66,7 +88,7 @@ const active_page = ref("")
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .el-descriptions * {
     background-color: var(--el-bg-color);
 }
@@ -94,17 +116,98 @@ const active_page = ref("")
     transition: all .5s;
 }
 
-.el-collapse .el-collapse-item.is-active>*:first-child {
-    color: var(--el-color-primary) !important;
-    border-color: var(--el-color-primary);
-    position: absolute;
-    z-index: 1;
-    /* transition: all 0.3s; */
+.folder {
+    position: relative;
 }
 
-.el-collapse .el-collapse-item.is-active>*:last-child {
+/* ::v-deep .el-collapse-item.is-active */
+::v-deep .el-collapse-item.is-active>*:first-child span {
+    color: var(--el-color-primary) !important;
+}
+::v-deep .el-collapse-item.is-active>*:first-child {
+    width: 100vh;
+    color: var(--el-color-primary) !important;
+    border-color: var(--el-color-primary) !important;
+    position: absolute;
+    z-index: 1;
+    transition: all 0.3s;
+}
+
+::v-deep .el-collapse .el-collapse-item.is-active>*:last-child {
     transform: translateY(3rem);
-    /* position: relative; */
-    /* top: 3rem; */
+}
+
+::v-deep .el-collapse .el-collapse-item.is-active>*:last-child li {
+    list-style: none;
+}
+
+.video_list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: .4rem .3rem .4rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transform: translatex(-2rem);
+    transition: all .3s;
+
+    .cover_img {
+        width: 2.2rem;
+        height: 2.2rem;
+        margin-right: 0.5rem;
+        object-fit: cover;
+        transition: all .3s;
+    }
+
+    .big_img {
+        margin-right: 0.5rem;
+        transition: all .4s;
+        border-radius: 10px;
+    }
+
+    .video_title {
+        transition: all .3s;
+    }
+
+    .other_info {
+        opacity: 0;
+        position: absolute;
+        transition: all .3s;
+    }
+    
+    .video_duration {
+        margin-left: 2rem;
+    }
+}
+
+.video_list:hover {
+    background-color: var(--el-bg-color-page);
+    padding: 1rem .3rem 1rem 1rem;
+
+    * {
+        color: var(--el-color-primary) !important;
+    }
+
+    .video
+
+    .video_upper {
+        opacity: 1 !important;
+    }
+
+    .cover_img {
+        /* height:0 */
+        width: 0;
+        opacity: 0;
+        width: 0;
+    }
+
+    .big_img {
+        height: 6rem !important;
+    }
+
+    .other_info {
+        opacity: 1;
+        position: relative;
+    }
 }
 </style>
