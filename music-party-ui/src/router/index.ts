@@ -84,13 +84,12 @@ const routes: Array<RouteRecordRaw> = [
                     icon: 'ri:bilibili-fill'
                 }
             }, {
-                path: '/bind/song-list',
-                component: () => import('@/views/bind/SongList.vue'),
+                path: '/bind/music-list',
+                component: () => import('@/views/bind/MusicList.vue'),
                 name: 'bind-song-list',
                 meta: {
                     title: '歌单收藏',
                     icon: 'streamline:music-folder-song',
-                    permission: [],
                     isAction: true,
                 }
             }

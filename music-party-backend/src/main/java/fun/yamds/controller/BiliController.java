@@ -1,15 +1,14 @@
 package fun.yamds.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import fun.yamds.pojo.BiliCookiePojo;
-import fun.yamds.pojo.BiliuserPojo;
-import fun.yamds.pojo.Result;
-import fun.yamds.pojo.UserPojo;
+import cn.dev33.satoken.stp.StpUtil;
+import fun.yamds.pojo.*;
 import fun.yamds.service.BiliService;
 import fun.yamds.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -38,16 +37,10 @@ public class BiliController {
 
     @SaCheckLogin
     @PostMapping("/bind")
-    public Result bindBiliUser(@RequestBody Map<String, Object> map) {
-        //user_id: string, bili_id: string, bili_name: string, bili_pic: string
-        BiliuserPojo biliuser = new BiliuserPojo(
-                Long.parseLong(map.get("bili_id").toString()),
-                map.get("bili_name").toString(),
-                map.get("bili_pic").toString()
-        );
+    public Result bindBiliUser(@RequestBody BiliuserPojo biliuser) {
         UserPojo user = new UserPojo();
-        user.setId(Long.parseLong(map.get("user_id").toString()));
-        user.setBiliId(Long.parseLong(map.get("bili_id").toString()));
+        user.setId(StpUtil.getLoginIdAsLong());
+        user.setBiliId(biliuser.getBiliId());
         return biliService.saveBiliUser(biliuser, user);
     }
 
@@ -70,9 +63,10 @@ public class BiliController {
     }
 
     @SaCheckLogin
-    @GetMapping("/folderList/{user_id}")
-    public Result getFolderList(@PathVariable String user_id) {
-        Result isBind = userService.isBindBili(new UserPojo(Long.parseLong(user_id)));     // 判断是否绑定了Bili id
+    @GetMapping("/folderList")
+    public Result getFolderList() {
+        System.out.println(new UserPojo(StpUtil.getLoginIdAsLong()));
+        Result isBind = userService.isBindBili(new UserPojo(StpUtil.getLoginIdAsLong()));     // 判断是否绑定了Bili id
         if(isBind.getSuccess()) {
             return biliService.getFolderList(isBind.getData().get("bili_id").toString());
         }
@@ -83,5 +77,30 @@ public class BiliController {
     @GetMapping("/folderInfo/{media_id}/{pn}")
     public Result getFolderInfo(@PathVariable String media_id, @PathVariable int pn) {
         return biliService.getFolderInfo(media_id, pn);
+    }
+
+    @SaCheckLogin
+    @PostMapping("/favMusic")
+    public Result saveFavMusic(@RequestBody FavmusicListPojo favmusicListPojo) {
+        System.out.println(favmusicListPojo);
+        favmusicListPojo.setUserId(StpUtil.getLoginIdAsLong());
+        favmusicListPojo.setCreateTime(Long.toString(new Date().getTime()));
+        return biliService.saveFavMusic(favmusicListPojo);
+    }
+
+    @SaCheckLogin
+    @DeleteMapping("/favMusic/{music_id}")
+    public Result deleteFavMusic(@PathVariable String music_id) {
+        FavmusicListPojo favmusicListPojo = new FavmusicListPojo();
+        favmusicListPojo.setUserId(StpUtil.getLoginIdAsLong());
+        favmusicListPojo.setMusicId(music_id);
+        return biliService.deleteFavMusic(favmusicListPojo);
+    }
+
+
+    @SaCheckLogin
+    @GetMapping("/favMusic")
+    public Result getFavMusic() {
+        return biliService.getFavMusic(StpUtil.getLoginIdAsLong());
     }
 }

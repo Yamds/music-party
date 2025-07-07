@@ -3,15 +3,16 @@
         <DocBlock :type="'info'" title="哔哩哔哩" icon="fa-solid:user" context="绑定信息、点歌~" />
         <el-divider content-position="left">b站用户绑定</el-divider>
         <el-descriptions title="" :column=1>
-            <el-descriptions-item label="">
-                <span v-if="userInfo.bind.bilibili == null">获取失败</span>
-                <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
-                <span v-else="!userInfo.bind.bilibili"><img :src="userBindName.biliInfo[2]" alt=""></span>
+            <el-descriptions-item label="头像">
+                <el-avatar :size="60" shape="square">
+                    <img :src="userBindName?.biliInfo[2] || '//i0.hdslb.com/bfs/seed/jinkela/short/webui/avatar/img/res-local6.jpeg'"
+                        referrerPolicy="no-referrer" alt="">
+                </el-avatar>
             </el-descriptions-item>
             <el-descriptions-item label="用户名">
-                <span v-if="userInfo.bind.bilibili == null">获取失败</span>
+                <span v-if="userInfo.bind.bilibili == null || userBindName?.biliInfo[1] == null">获取失败</span>
                 <span v-else-if="userInfo.bind.bilibili == -1">尚未绑定</span>
-                <span v-else="!userInfo.bind.bilibili">{{ userBindName.biliInfo[1] }}</span>
+                <span v-else="!userInfo.bind.bilibili">{{ userBindName?.biliInfo[1] || '' }}</span>
             </el-descriptions-item>
             <el-descriptions-item label="bid">
                 <span v-if="userInfo.bind.bilibili == null">获取失败</span>
@@ -30,7 +31,7 @@
             </div>
         </div>
         <el-divider content-position="left">绑定用户收藏夹</el-divider>
-        <el-button @click="biliStore.getFolderList(userStore.userInfo.id)">getFolderList</el-button>
+        <!-- <el-button @click="biliStore.getFolderList(userStore.userInfo.id)">getFolderList</el-button> -->
         <div class="folder">
             <el-collapse accordion :expand-icon-position="'left'" v-model="active_page">
                 <el-collapse-item v-for="item in biliStore.userFolderList?.fInfo" :title="item.info.title"
@@ -40,18 +41,26 @@
                         v-infinite-scroll="() => biliStore.getFolderInfo(item.info.title, item.info.id, item.page)"
                         infinite-scroll-distance="0">
                         <li v-for="i, index in item.medias" :key="i.id" class="infinite-list-item">
-                            <div class="video_list">
-                                <span>{{ index+1 }}.</span>
-                                <img class="big_img" style="height: 0" :src="i.cover" referrerPolicy="no-referrer" alt="">
+                            <div class="video_list" @click="biliStore.changeFavMusic(i.bvid, i.title, i.upper.name, i.cover)">
+                                <span>{{ index + 1 }}.</span>
+                                <el-icon v-if="favMusicList.some(item => item.musicId === i.bvid)">
+                                    <IconifyIcon icon="ph:star-four-fill" />
+                                </el-icon>
+                                <el-icon v-else>
+                                    <IconifyIcon icon="ph:star-four-bold" />
+                                </el-icon>
+                                <img class="big_img" style="height: 0" :src="i.cover" referrerPolicy="no-referrer"
+                                    alt="">
                                 <img class="cover_img" :src="i.cover" referrerPolicy="no-referrer" alt="">
                                 <div class="video_info">
                                     <span class="video_title">{{ i.title }}</span>
                                     <div class="other_info">
                                         <span class="video_upper">{{ i.upper.name }}</span>
                                         <span class="video_duration">
-                                            {{ Math.floor(i.duration/3600)==0?"" : Math.floor(i.duration/3600).toString().padStart(2, "0") + ":"}}
-                                            {{ Math.floor(i.duration%3600/60).toString().padStart(2, "0") }}:
-                                            {{ (i.duration%60).toString().padStart(2, "0") }}
+                                            {{ Math.floor(i.duration / 3600) == 0 ? "" :
+                                                Math.floor(i.duration / 3600).toString().padStart(2, "0") + ":" }}
+                                            {{ Math.floor(i.duration % 3600 / 60).toString().padStart(2, "0") }}:
+                                            {{ (i.duration % 60).toString().padStart(2, "0") }}
                                         </span>
                                     </div>
                                 </div>
@@ -74,7 +83,7 @@
 import DocBlock from '@/components/DocBlock.vue';
 import { useBiliStore } from '@/store/biliStore';
 import { useUserStore } from '@/store/userStore';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const biliStore = useBiliStore()
 const userStore = useUserStore()
@@ -83,8 +92,14 @@ const bind_name = ref('')
 
 const userInfo = computed(() => userStore.userInfo)
 const userBindName = computed(() => userStore.userBindName)
+const favMusicList = computed(() => biliStore.favMusicList)
 
 const active_page = ref("")
+
+onMounted(() => {
+    biliStore.getFolderList(false)
+    biliStore.getFavMusic()
+})
 
 </script>
 
@@ -103,7 +118,7 @@ const active_page = ref("")
 }
 
 .infinite-list {
-    max-height: 300px;
+    max-height: 600px;
     width: 100vh;
     overflow: auto;
 }
@@ -124,6 +139,7 @@ const active_page = ref("")
 ::v-deep .el-collapse-item.is-active>*:first-child span {
     color: var(--el-color-primary) !important;
 }
+
 ::v-deep .el-collapse-item.is-active>*:first-child {
     width: 100vh;
     color: var(--el-color-primary) !important;
@@ -137,7 +153,7 @@ const active_page = ref("")
     transform: translateY(3rem);
 }
 
-::v-deep .el-collapse .el-collapse-item.is-active>*:last-child li {
+::v-deep .el-collapse .el-collapse-item>*:last-child li {
     list-style: none;
 }
 
@@ -174,23 +190,25 @@ const active_page = ref("")
         position: absolute;
         transition: all .3s;
     }
-    
+
     .video_duration {
         margin-left: 2rem;
+    }
+
+    .el-icon {
+        transition: all .3s;
     }
 }
 
 .video_list:hover {
     background-color: var(--el-bg-color-page);
-    padding: 1rem .3rem 1rem 1rem;
+    padding: 0.5rem .3rem 0.5rem 1rem;
 
     * {
         color: var(--el-color-primary) !important;
     }
 
-    .video
-
-    .video_upper {
+    .video .video_upper {
         opacity: 1 !important;
     }
 
@@ -202,12 +220,16 @@ const active_page = ref("")
     }
 
     .big_img {
-        height: 6rem !important;
+        height: 4.5rem !important;
     }
 
     .other_info {
         opacity: 1;
         position: relative;
+    }
+
+    .el-icon {
+        margin-right: 0.6rem;
     }
 }
 </style>

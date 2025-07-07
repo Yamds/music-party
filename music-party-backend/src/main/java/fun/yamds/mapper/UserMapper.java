@@ -1,6 +1,7 @@
 package fun.yamds.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import fun.yamds.pojo.BiliuserPojo;
 import fun.yamds.pojo.UserPojo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -46,7 +47,7 @@ public interface UserMapper extends BaseMapper<UserPojo> {
             "FROM user u " +
             "JOIN biliuser b ON u.bili_id = b.bili_id " +
             "WHERE u.id = #{userID} ")
-    List<String> getBindBiliInfoByUserId(Long userId);
+    List<BiliuserPojo> getBindBiliInfoByUserId(Long userId);
 
     @Update({
             "<script>",

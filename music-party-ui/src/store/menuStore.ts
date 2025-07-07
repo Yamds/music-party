@@ -92,8 +92,8 @@ export const useMenuStore = defineStore('menu', () => {
                         permission: [],
                     }
                 }, {
-                    name: "bind-song-list",
-                    path: '/bind/song-list',
+                    name: "bind-music-list",
+                    path: '/bind/music-list',
                     meta: {
                         title: "收藏歌单",
                         icon: "streamline:music-folder-song",

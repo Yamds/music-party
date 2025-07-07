@@ -26,14 +26,12 @@ public class UserController {
     @SaIgnore
     @PostMapping("/login")
     public Result login(@RequestBody UserPojo user) {
-        System.out.println("----------login");
         return userService.login(user);
     }
 
     @SaCheckLogin
     @PostMapping("/logout")
     public Result logout() {
-        System.out.println("----------logout");
         StpUtil.logout();
         return Result.ok().success(true).msg("注销账号");
     }
@@ -41,14 +39,12 @@ public class UserController {
     @SaIgnore
     @PostMapping("/register")
     public Result register(@RequestBody UserPojo user) {
-        System.out.println("----------register");
         return userService.register(user);
     }
 
     @SaCheckLogin
     @GetMapping("/isLogin")
     public Result isLogin() {
-        System.out.println("----------isLogin");
         if(StpUtil.isLogin()) {
             return Result.ok().msg("已登录").success(true);
         }
@@ -58,7 +54,6 @@ public class UserController {
     @SaCheckLogin
     @GetMapping("/info")
     public Result getUserInfoById() {
-        System.out.println("----------getUserInfoById");
         UserPojo user = new UserPojo();
         user.setId(StpUtil.getLoginIdAsLong());
         return userService.getUserInfoById(user);
@@ -67,7 +62,6 @@ public class UserController {
     @SaIgnore
     @GetMapping("/checkUsername/{username}")
     public Result checkUsername(@PathVariable String username) {  // 从路径中提取userID
-        System.out.println("----------checkUsername");
         QueryWrapper<UserPojo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         if(userService.getOne(queryWrapper) != null) {
@@ -79,7 +73,6 @@ public class UserController {
     @SaCheckLogin
     @PostMapping("/changeUserInfo")
     public Result changeUserInfo(@RequestBody UserPojo user) {
-        System.out.println("----------changeUserInfo");
         user.setId(StpUtil.getLoginIdAsLong());
         return userService.changeUserInfo(user);
     }

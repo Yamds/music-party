@@ -10,14 +10,6 @@ export const usePermissionStore = defineStore('permission', () => {
 
     // 根据用户store 拿到权限list
     let permission_list = computed(() => store.userInfo.permission)
-    // let permission_list = useUserStore().userInfo.permission
-    // watch(
-    //     () => useUserStore().userInfo.permission,
-    //     (newVal) => {
-    //         permission_list = newVal
-    //     },
-    //     { immediate: true }
-    // )
 
     // 权限检查方法 查看某一项menu 需要哪些权限
     const hasMenuPermission = (menu: MenuInter) => {

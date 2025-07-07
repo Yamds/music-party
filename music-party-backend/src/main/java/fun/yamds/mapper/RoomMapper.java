@@ -1,4 +1,9 @@
 package fun.yamds.mapper;
 
-public interface RoomMapper {
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import fun.yamds.pojo.RoomPojo;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface RoomMapper extends BaseMapper<RoomPojo> {
 }

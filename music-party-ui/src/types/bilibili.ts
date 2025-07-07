@@ -74,3 +74,16 @@ export interface BiliFolderInfoInter {
         }
     }[]
 }
+
+export interface BiliMusicItem {
+    type?: string,
+    musicId?: string,
+    musicName?: string,
+    musicAuthor?: string,
+    musicPic?: string,
+    create_time?: string,
+}
+
+export interface BiliFavListInter {
+    favMusicList?: BiliMusicItem[]
+}

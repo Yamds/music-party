@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import type { BiliBackstageReturnInter, BiliFolderInfoInter, BiliFolerListInter, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter, BiliSearchTypeUserReturnInter } from '@/types/bilibili';
-import { httpBindBiliUser, httpBindnameSearch, httpGetFolderInfo, httpGetFolderList, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveSessdata } from '@/api/biliApi';
+import type { BiliBackstageReturnInter, BiliFavListInter, BiliFolderInfoInter, BiliFolerListInter, BiliMusicItem, BiliQRcodeLoginReturnInter, BiliQRcodeReturnInter, BiliSearchTypeUserReturnInter } from '@/types/bilibili';
+import { httpBindBiliUser, httpBindnameSearch, httpDeleteFavMusic, httpGetFavMusic, httpGetFolderInfo, httpGetFolderList, httpGetQrCode, httpGetSessdata, httpQrCodeLogin, httpSaveFavMusic, httpSaveSessdata } from '@/api/biliApi';
 import { useUserStore } from './userStore';
 
 
@@ -19,6 +19,8 @@ export const useBiliStore = defineStore('bili', () => {
         fList: {} as BiliFolerListInter,
         fInfo: [] as BiliFolderInfoInter[],
     })
+
+    let favMusicList = ref([] as BiliMusicItem[])
 
     let isLoading = ref(false)
 
@@ -50,11 +52,11 @@ export const useBiliStore = defineStore('bili', () => {
     }
 
     const bindBiliuser = async (biliId: string, biliName: string, biliPic: string) => {
-        const userId = useUserStore().userInfo.id
-        await httpBindBiliUser(userId, biliId, biliName, biliPic).then(data => {
+        await httpBindBiliUser(biliId, biliName, biliPic).then(data => {
             if (data.success) {
                 useUserStore().getUser()
                 bindnameList.value = {}
+                getFavMusic()
                 ElMessage.success("bili绑定成功！")
             } else {
                 ElMessage.error(data.msg)
@@ -149,12 +151,16 @@ export const useBiliStore = defineStore('bili', () => {
         })
     }
 
-    const getFolderList = async (user_id: string) => {
+    const getFolderList = async (update: boolean) => {
+        if (!update && userFolderList.value.fInfo.length != 0) {
+            return
+        }
+
         userFolderList.value = {
             fList: {} as BiliFolerListInter,
             fInfo: [] as BiliFolderInfoInter[],
         }
-        await httpGetFolderList(user_id).then(data => {
+        await httpGetFolderList().then(data => {
             if (data.success) {
                 userFolderList.value.fList = data.data as BiliFolerListInter
                 for (let item of userFolderList.value.fList.list) {
@@ -167,6 +173,8 @@ export const useBiliStore = defineStore('bili', () => {
                     userFolderList.value.fInfo.push(temp)
                 }
                 ElMessage.success("成功获取收藏夹")
+            } else {
+                ElMessage.error(data.msg)
             }
         })
     }
@@ -200,9 +208,40 @@ export const useBiliStore = defineStore('bili', () => {
 
     }
 
-    const test = (media_id: string, pn: number) => {
-        console.log(media_id, "---", pn)
+    const changeFavMusic = (music_id: string, music_name: string, music_author: string, music_pic: string) => {
+        if (favMusicList.value.some(item => item.musicId === music_id)) {
+            deleteFavMusic(music_id)
+        } else {
+            saveFavMusic(music_id, music_name, music_author, music_pic)
+        }
     }
+
+    const saveFavMusic = async (music_id: string, music_name: string, music_author: string, music_pic: string) => {
+        await httpSaveFavMusic(music_id, music_name, music_author, music_pic).then(data => {
+            if (data.success) {
+                favMusicList.value.push({musicId: music_id, musicName: music_name, musicAuthor: music_author, musicPic: music_pic, type: 'bili'})
+            }
+        })
+    }
+
+    const deleteFavMusic = async (music_id: string) => {
+        await httpDeleteFavMusic(music_id).then(data => {
+            if (data.success) {
+                favMusicList.value = favMusicList.value.filter(item => item.musicId != music_id)
+            }
+        })
+    }
+
+    const getFavMusic = async () => {
+        await httpGetFavMusic().then(data => {
+            if (data.success) {
+                const temp = data.data as BiliFavListInter
+                favMusicList.value = temp.favMusicList || []
+                console.log(favMusicList)
+            }
+        })
+    }
+
 
     return {
         biliQrCode,
@@ -212,6 +251,7 @@ export const useBiliStore = defineStore('bili', () => {
         bindnameList,
         userFolderList,
         isLoading,
+        favMusicList,
         saveSessdata,
         getSessdata,
         getQrCode,
@@ -219,6 +259,8 @@ export const useBiliStore = defineStore('bili', () => {
         bindBiliuser,
         getFolderList,
         getFolderInfo,
-        test,
+        changeFavMusic,
+        getFavMusic,
+        deleteFavMusic,
     }
 })

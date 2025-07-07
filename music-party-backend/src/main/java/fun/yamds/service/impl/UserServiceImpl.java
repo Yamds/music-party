@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import fun.yamds.mapper.UserMapper;
 import fun.yamds.mapper.UserRoleMapper;
+import fun.yamds.pojo.BiliuserPojo;
 import fun.yamds.pojo.Result;
 import fun.yamds.pojo.UserPojo;
 import fun.yamds.pojo.UserRolePojo;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author ：Yamds
@@ -108,11 +106,18 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
     @Override
     public Result getBindBiliName(UserPojo user) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("bili_info", userMapper.getBindBiliInfoByUserId(user.getId()));
-        if(map.get("bili_info") != null)
-            return Result.ok().msg("bili用户名获取成功").data(map);
-        else
-            return Result.error().msg("bili用户名未获取或不存在");
+        List<BiliuserPojo> biliuser = userMapper.getBindBiliInfoByUserId(user.getId());
+        if(!biliuser.isEmpty()) {
+            map.put("bili_info", Arrays.asList(
+                    biliuser.get(0).getBiliId(),
+                    biliuser.get(0).getBiliName(),
+                    biliuser.get(0).getBiliPic()
+            ));
+            if(map.get("bili_info") != null)
+                return Result.ok().msg("bili信息获取成功").data(map);
+        }
+        return Result.error().msg("bili信息获取失败或不存在");
+
     }
 
     @Override
@@ -147,9 +152,9 @@ public class UserServiceImpl extends ServiceImpl<BaseMapper<UserPojo>, UserPojo>
         map.put("role_name", result2.getData().get("role_name"));
         map.put("permission_name", result3.getData().get("permission_name"));
         if(result4.getData() != null)
-            map.put("bili_name", result4.getData().get("bili_name"));
+            map.put("bili_info", result4.getData().get("bili_info"));
         else
-            map.put("bili_name", "");
+            map.put("bili_info", "");
         return Result.ok().msg("成功获取用户信息、角色、权限和绑定用户名").data(map);
     }
 

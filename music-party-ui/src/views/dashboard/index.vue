@@ -15,6 +15,12 @@
 
 <script setup lang="ts">
 import '@/styles/theme/catppuccin.scss'
+import { onMounted } from 'vue';
+import { useUserStore } from '@/store/userStore';
+
+onMounted(() => {
+    useUserStore().getUser()
+})
 
 </script>
 
@@ -88,7 +94,7 @@ span {
 
 }
 
-.background-icon * {
+::v-deep .el-icon * {
     color: var(--catppuccin-crust) !important;
 }
 

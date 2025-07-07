@@ -1,9 +1,12 @@
 package fun.yamds.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import fun.yamds.mapper.BiliCookieMapper;
+import fun.yamds.mapper.FavmusicListMapper;
 import fun.yamds.pojo.*;
 import fun.yamds.service.BiliService;
-import fun.yamds.service.UserService;
 import fun.yamds.utils.JsonObjParseUtils;
 import fun.yamds.utils.HttpUtils;
 import fun.yamds.utils.ObjMapUtils;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @Service
 public class BiliServiceImpl implements BiliService {
+
     @Autowired
     private BiliCookieMapper biliCookieMapper;
 
@@ -26,11 +30,15 @@ public class BiliServiceImpl implements BiliService {
     @Autowired
     private BiliuserServiceImpl biliuserServiceImpl;
 
+    @Autowired
+    private FavmusicListServiceImpl favmusicListServiceImpl;
+
     // 封装一个请求
     @Autowired
     private HttpUtils httpUtils;
+
     @Autowired
-    private UserService userService;
+    private FavmusicListMapper favmusicListMapper;
 
     @Override
     public Result saveCookie(BiliCookiePojo bili) {
@@ -89,6 +97,44 @@ public class BiliServiceImpl implements BiliService {
             return Result.error().msg("bili绑定数据存储失败");
         }
         return Result.error().msg("bili绑定对象为空");
+    }
+
+    @Override
+    public Result saveFavMusic(FavmusicListPojo favmusicListPojo) {
+        try {
+            if(favmusicListPojo != null) {
+                favmusicListPojo.setType("bili");
+                boolean r1 = favmusicListServiceImpl.save(favmusicListPojo);
+                if(r1)
+                    return Result.ok().msg("成功存入收藏歌曲");
+            }
+            return Result.error().msg("收藏歌曲保存失败");
+        } catch (RestClientException e) {
+            return Result.error().msg(e.getMessage());
+        }
+    }
+
+    @Override
+    public Result deleteFavMusic(FavmusicListPojo favmusicListPojo) {
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("music_id", favmusicListPojo.getMusicId());
+        columnMap.put("user_id", favmusicListPojo.getUserId());
+        boolean resu = favmusicListServiceImpl.removeByMap(columnMap);
+        if(resu) {
+            return Result.ok().msg("移除成功");
+        } else
+            return Result.error().msg("移除失败");
+    }
+
+    @Override
+    public Result getFavMusic(Long userId) {
+        List<FavmusicListPojo> favMusicList = favmusicListMapper.findAllMusicIdByUserId(userId, "bili");
+        if(favMusicList != null && !favMusicList.isEmpty()) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("favMusicList", favMusicList);
+            return Result.ok().msg("成功获取收藏列表").data(map);
+        }
+        return Result.error().msg("收藏列表获取失败");
     }
 
     @Override
@@ -194,6 +240,7 @@ public class BiliServiceImpl implements BiliService {
         return Result.error();
     }
 
+    @Override
     public Result getFolderInfo(String media_id, int pn) {
         try {
             String request_url = "https://api.bilibili.com/x/v3/fav/resource/list?type=0&ps=20&media_id=" + media_id + "&pn=" + pn ;
@@ -209,6 +256,30 @@ public class BiliServiceImpl implements BiliService {
                 );
                 if(response != null)
                     return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取收藏夹详细信息");
+                return Result.error().msg("响应内容不存在");
+            }
+        }catch (RestClientException e) {
+            return Result.error().msg("响应失败, " + e.getMessage());
+        }
+        return Result.error();
+    }
+
+    @Override
+    public Result getVideoInfo(String bvid) {
+        try {
+            String request_url = "https://api.bilibili.com/x/web-interface/wbi/view?bvid=" + bvid;
+            // 提取Map中的Cookie字符串
+            String cookies = (String) getAllCookie().getData().get("bili_cookie");
+            if(cookies != null && !cookies.isEmpty()) {
+                Map<String, String> customHeaders = new HashMap<>();
+                customHeaders.put("Cookie", cookies);
+                BiliApiResponsePojo<BiliApiResponsePojo.VideoInfo> response = httpUtils.getWithHeaders(
+                        request_url,
+                        new JsonObjParseUtils.ParameterizedTypeReference<BiliApiResponsePojo<BiliApiResponsePojo.VideoInfo>>() {},
+                        customHeaders
+                );
+                if(response != null)
+                    return Result.ok().data(ObjMapUtils.convertToMap(response.getData())).msg("成功获取视频细信息");
                 return Result.error().msg("响应内容不存在");
             }
         }catch (RestClientException e) {

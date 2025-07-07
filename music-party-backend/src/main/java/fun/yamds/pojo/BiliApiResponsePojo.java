@@ -18,6 +18,7 @@ public class BiliApiResponsePojo<T> {
         private String url;
         private String qrcode_key;
     }
+
     @Data
     public static class QrcodeSuccess {
         private String url;
@@ -99,6 +100,26 @@ public class BiliApiResponsePojo<T> {
                 private String name;
                 private String face;
             }
+        }
+    }
+
+    @Data
+    public static class VideoInfo {
+        private String bvid;
+        private long avid;
+        private int videos;
+        private String pic;
+        private String title;
+        private String desc;
+        private long duration;
+        private Owner owner;
+        private long cid;
+
+        @Data
+        public static class Owner {
+            private long mid;
+            private String name;
+            private String face;
         }
     }
 
